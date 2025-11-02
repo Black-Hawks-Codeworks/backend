@@ -1,8 +1,5 @@
-import { fixupConfigRules, fixupPluginRules } from '@eslint/compat';
-import react from 'eslint-plugin-react';
+import { fixupConfigRules } from '@eslint/compat';
 import prettier from 'eslint-plugin-prettier';
-import reactRefresh from 'eslint-plugin-react-refresh';
-import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,61 +33,28 @@ export default [
     ],
   },
   ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:react/recommended',
-      'plugin:react-hooks/recommended',
-      'plugin:import/recommended',
-      'plugin:jsx-a11y/recommended',
-      // Unfortunately eslint-config-airbnb is not compatible with the latest major version of eslint (9).
-      // 'airbnb',
-      // 'airbnb/hooks',
-      'prettier',
-      'eslint-config-prettier'
-    )
+    compat.extends('eslint:recommended', 'plugin:import/recommended', 'prettier', 'eslint-config-prettier')
   ),
   {
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['**/*.js', '**/*.mjs'],
     plugins: {
-      react: fixupPluginRules(react),
       prettier,
-      'react-refresh': reactRefresh,
-      'react-hooks': fixupPluginRules(reactHooks),
     },
 
     languageOptions: {
       globals: {
-        ...globals.browser,
         ...globals.node,
         ...globals.jest,
-        google: 'readonly',
       },
-      ecmaVersion: 6,
+      ecmaVersion: 2022,
       sourceType: 'module',
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-      },
     },
 
     settings: {
-      react: {
-        version: 'detect',
-      },
-
-      'import/extensions': ['.js', '.jsx'],
+      'import/extensions': ['.js', '.mjs'],
       'import/resolver': {
         node: {
-          extensions: ['.js', '.jsx'],
-        },
-        alias: {
-          // Allow ESLint to recognize Vite imports and path aliases.
-          map: [
-            ['@', './src'],
-            ['', './public'],
-          ],
-          extensions: ['.js', '.jsx'],
+          extensions: ['.js', '.mjs'],
         },
       },
     },
@@ -160,24 +124,6 @@ export default [
       'no-var': ['error'],
       'no-invalid-this': ['warn'],
 
-      'react/jsx-filename-extension': [
-        'warn',
-        {
-          extensions: ['.js', '.jsx'],
-        },
-      ],
-      'react/react-in-jsx-scope': ['off'],
-      'react/prop-types': ['off'],
-      'react/require-default-props': ['off'],
-      'react/jsx-boolean-value': ['off'],
-      'react/jsx-props-no-spreading': ['off'],
-      'react/jsx-key': ['error'],
-      'react/function-component-definition': ['off'],
-      'react/no-array-index-key': ['warn'],
-      'react/no-unescaped-entities': ['warn'],
-      'react-hooks/rules-of-hooks': ['error'],
-      'react-hooks/exhaustive-deps': ['error'],
-      'react-refresh/only-export-components': ['warn'],
       'import/no-named-as-default-member': ['warn'],
       'import/prefer-default-export': ['off'],
       'import/no-import-module-exports': ['warn'],
@@ -211,19 +157,6 @@ export default [
           peerDependencies: true,
         },
       ],
-    },
-  },
-  {
-    files: ['vite.config.js'],
-    languageOptions: {
-      globals: {
-        ...globals.node,
-      },
-      ecmaVersion: 2022,
-      sourceType: 'module',
-    },
-    rules: {
-      'import/no-unresolved': 'off',
     },
   },
 ];

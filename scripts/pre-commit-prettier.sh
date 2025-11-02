@@ -4,7 +4,7 @@ set -e
 # Collect only the files we care about with JS or JSON extensions.
 changed_files=()
 for file in "$@"; do
-  if [[ -f "$file" && ( "$file" == *.js || "$file" == *.jsx || "$file" == *.json || "$file" == *.css ) ]]; then
+  if [[ -f "$file" && ( "$file" == *.js || "$file" == *.mjs || "$file" == *.json || "$file" == *.css ) ]]; then
     changed_files+=("$file")
   fi
 done

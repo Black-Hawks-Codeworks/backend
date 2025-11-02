@@ -8,30 +8,6 @@
 
 There is no Vite.js for express.js project the project must be initialized manually.
 
-```bash
-npm init -y
-```
-
-Then install Express.js:
-
-```bash
-npm i express
-```
-
-To run the server on watch mode:
-**Don't use this**
-
-```bash
-npm i -D nodemon
-```
-
-"-D" means "developer dependency". Also we can use:
-**Don't use this**
-
-```bash
-node --watch server.js
-```
-
 If add the start:dev script in the package.json:
 **Use this**
 
@@ -76,8 +52,8 @@ Best practices:
 - Close the pool when shutting down your application:
 
 ```javascript
-process.on("SIGINT", async () => {
-	await pool.end();
-	process.exit(0);
+process.on('SIGINT', async () => {
+  await pool.end();
+  process.exit(0);
 });
 ```

@@ -1,21 +1,30 @@
 {
-	"name": "expressjs-tutorial",
-	"version": "1.0.0",
-	"description": "",
-	"license": "ISC",
-	"author": "",
-	"type": "module",
-	"main": "index.mjs",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"start:dev": "nodemon ./src/index.mjs",
-		"start": "node ./src/index.mjs"
-	},
-	"dependencies": {
-		"express": "^5.1.0",
-		"pg": "^8.16.3"
-	},
-	"devDependencies": {
-		"nodemon": "^3.1.10"
-	}
+  "name": "black-hawks-backend",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node ./src/index.mjs",
+    "start:dev": "nodemon ./src/index.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.4.1",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.0",
+    "eslint": "^9.39.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "prettier-plugin-packagejson": "^2.5.19"
+  }
 }
