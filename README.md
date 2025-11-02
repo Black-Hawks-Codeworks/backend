@@ -57,3 +57,11 @@ process.on('SIGINT', async () => {
   process.exit(0);
 });
 ```
+
+### Swagger
+
+To see(and use) the available endpoints, while the containers are running, visit:
+
+```
+http://localhost:3000/api-docs
+```
