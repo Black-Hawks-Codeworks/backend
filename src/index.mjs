@@ -9,17 +9,18 @@ app.use(express.json());
 const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
-// Database configuration
+// Database configuration - read connection from environment with sensible defaults
+// Support both PG* and POSTGRES_* variable names (some env files use POSTGRES_* keys)
 const pool = new Pool({
-  user: 'admin',
-  password: 'admin123',
-  host: 'localhost',
-  port: 5432,
-  database: 'mydb',
+  user: env.POSTGRES_USER || 'postgres',
+  password: env.POSTGRES_PASSWORD || 'postgres',
+  host: env.POSTGRES_HOST || 'db',
+  port: env.PGPORT ? Number(env.PGPORT) : env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
+  database: env.PGDATABASE || env.POSTGRES_DB || 'postgres',
 });
 
 // Example route to get all users
-app.get('api/users', async (req, res) => {
+app.get('/api/users', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM users');
     res.json(result.rows);
@@ -30,7 +31,7 @@ app.get('api/users', async (req, res) => {
 });
 
 // Example route to create a new user
-app.post('api/users', async (req, res) => {
+app.post('/api/users', async (req, res) => {
   const { name, email } = req.body;
   try {
     const result = await pool.query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *', [name, email]);
