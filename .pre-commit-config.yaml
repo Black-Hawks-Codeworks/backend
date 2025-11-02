@@ -1,0 +1,14 @@
+repos:
+  - repo: local
+    hooks:
+      - id: eslint
+        name: ESLint
+        entry: ./scripts/pre-commit-eslint.sh
+        language: script
+        pass_filenames: true
+
+      - id: prettier
+        name: Prettier
+        entry: ./scripts/pre-commit-prettier.sh
+        language: script
+        pass_filenames: true
