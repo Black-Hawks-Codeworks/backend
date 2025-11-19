@@ -13,16 +13,16 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 // Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const PORT = env.PORT || 3000;
+const PORT = env.PORT;
 console.log(env.PORT);
 
-// Database configuration - read connection from environment with sensible defaults
+// Database configuration
 const pool = new Pool({
-  user: env.POSTGRES_USER || 'postgres',
-  password: env.POSTGRES_PASSWORD || 'postgres',
-  host: env.POSTGRES_HOST || 'db',
-  port: env.PGPORT ? Number(env.PGPORT) : env.POSTGRES_PORT ? Number(env.POSTGRES_PORT) : 5432,
-  database: env.PGDATABASE || env.POSTGRES_DB || 'postgres',
+  user: env.POSTGRES_USER,
+  password: env.POSTGRES_PASSWORD,
+  host: env.POSTGRES_HOST,
+  port: Number(env.POSTGRES_PORT),
+  database: env.POSTGRES_DB,
 });
 
 app.get('/api/users', async (req, res) => {

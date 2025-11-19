@@ -14,4 +14,4 @@ ENV NODE_ENV=development
 EXPOSE 3000
 
 # Use Node's built-in watch mode for dev live-reload
-CMD ["node", "--watch", "./src/index.mjs"]
+CMD ["npm", "run", "dev"]
