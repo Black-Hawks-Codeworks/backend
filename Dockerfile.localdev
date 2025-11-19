@@ -1,9 +1,9 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 # Create app directory
 WORKDIR /app
 
-# Install dependencies (include devDependencies for nodemon in localdev)
+# Install dependencies
 COPY package*.json ./
 RUN npm ci
 
@@ -13,5 +13,5 @@ COPY . .
 ENV NODE_ENV=development
 EXPOSE 3000
 
-# Use nodemon for dev live-reload. Use npx so we don't need global install.
-CMD ["npx", "nodemon", "./src/index.mjs"]
+# Use Node's built-in watch mode for dev live-reload
+CMD ["node", "--watch", "./src/index.mjs"]

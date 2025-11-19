@@ -7,8 +7,8 @@
   "type": "module",
   "main": "index.mjs",
   "scripts": {
+    "dev": "node --watch ./src/index.mjs",
     "start": "node ./src/index.mjs",
-    "start:dev": "nodemon ./src/index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "overrides": {
@@ -29,7 +29,6 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-prettier": "^5.5.4",
-    "nodemon": "^3.1.10",
     "prettier": "^3.6.2",
     "prettier-plugin-packagejson": "^2.5.19"
   }
