@@ -47,6 +47,44 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+//psaxe ton hristi
+app.get('/api/auth/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+    if (result.rows.length === 0) {
+      res.status(401).json({ error: 'Invalid username or password' });
+    } else {
+      res.json(result.rows[0]);
+      console.log(result.rows[0]);
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/process/all', async (req, res) => {
+  const { username, processType } = req.body;
+  if (processType === 'repair') {
+    try {
+      const result = await pool.query('SELECT * FROM repairs WHERE username = $1', [username]);
+      res.json(result.rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  } else if (processType === 'return') {
+    try {
+      const result = await pool.query('SELECT * FROM returns WHERE username = $1', [username]);
+      res.json(result.rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+});
+
 // Listen on selected port
 // the second argument is a callback function that is called when the server has started
 app.listen(PORT, () => {
