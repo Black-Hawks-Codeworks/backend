@@ -55,8 +55,9 @@ app.get('/api/auth/login', async (req, res) => {
     if (result.rows.length === 0) {
       res.status(401).json({ error: 'Invalid username or password' });
     } else {
-      res.json(result.rows[0]);
-      console.log(result.rows[0]);
+      const user = result.rows[0];
+      res.json(user);
+      console.log(user);
     }
   } catch (err) {
     console.error(err);
@@ -65,10 +66,11 @@ app.get('/api/auth/login', async (req, res) => {
 });
 
 app.get('/api/process/all', async (req, res) => {
-  const { username, processType } = req.body;
+  const { useId, processType, userRole } = req.body;
+  console.log(useId, processType, userRole);
   if (processType === 'repair') {
     try {
-      const result = await pool.query('SELECT * FROM repairs WHERE username = $1', [username]);
+      const result = await pool.query('SELECT * FROM repairs WHERE username JOIN  = $1', [useId]);
       res.json(result.rows);
     } catch (err) {
       console.error(err);
@@ -76,7 +78,7 @@ app.get('/api/process/all', async (req, res) => {
     }
   } else if (processType === 'return') {
     try {
-      const result = await pool.query('SELECT * FROM returns WHERE username = $1', [username]);
+      const result = await pool.query('SELECT * FROM returns WHERE username = $1', [useId]);
       res.json(result.rows);
     } catch (err) {
       console.error(err);
