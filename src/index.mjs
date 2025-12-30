@@ -25,28 +25,6 @@ const pool = new Pool({
   database: env.POSTGRES_DB,
 });
 
-app.get('/api/users', async (req, res) => {
-  try {
-    const result = await pool.query('SELECT * FROM users');
-    res.json(result.rows);
-    console.log(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.post('/api/users', async (req, res) => {
-  const { name, email } = req.body;
-  try {
-    const result = await pool.query('INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *', [name, email]);
-    res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
 //psaxe ton hristi
 app.get('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
@@ -62,28 +40,6 @@ app.get('/api/auth/login', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-app.get('/api/process/all', async (req, res) => {
-  const { useId, processType, userRole } = req.body;
-  console.log(useId, processType, userRole);
-  if (processType === 'repair') {
-    try {
-      const result = await pool.query('SELECT * FROM repairs WHERE username JOIN  = $1', [useId]);
-      res.json(result.rows);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  } else if (processType === 'return') {
-    try {
-      const result = await pool.query('SELECT * FROM returns WHERE username = $1', [useId]);
-      res.json(result.rows);
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    }
   }
 });
 
