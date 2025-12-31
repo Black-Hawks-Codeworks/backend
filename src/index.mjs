@@ -26,7 +26,7 @@ const db = await JSONFilePreset('./data/processes.json', processes);
 console.log(db);
 
 //psaxe ton hristi
-app.post('/auth/login', async (req, res) => {
+app.post('/auth/login', (req, res) => {
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
   const { username, password } = req.body;
   const user = possibleUsers.find((u) => u.username === username && u.password === password);
@@ -37,6 +37,35 @@ app.post('/auth/login', async (req, res) => {
   }
 });
 
+app.get('/technician/processes', (req, res) => {
+  const { technicianId } = req.body;
+  const technicianProcesses = db.data.processes.filter((p) => p.technician === technicianId);
+  if (technicianProcesses && technicianProcesses.length > 0) {
+    res.json(technicianProcesses);
+  } else {
+    res.json([]);
+  }
+});
+
+app.get('/employee/processes', (req, res) => {
+  const { employeeId } = req.body;
+  const employeeProcesses = db.data.processes.filter((p) => p.employee === employeeId);
+  if (employeeProcesses && employeeProcesses.length > 0) {
+    res.json(employeeProcesses);
+  } else {
+    res.json([]);
+  }
+});
+
+app.get('/client/processes', (req, res) => {
+  const { clientId } = req.body;
+  const clientProcesses = db.data.processes.filter((p) => p.client === clientId);
+  if (clientProcesses && clientProcesses.length > 0) {
+    res.json(clientProcesses);
+  } else {
+    res.json([]);
+  }
+});
 // Listen on selected port
 // the second argument is a callback function that is called when the server has started
 app.listen(PORT, () => {
