@@ -5,10 +5,10 @@ import swaggerUi from 'swagger-ui-express';
 import { JSONFilePreset } from 'lowdb/node';
 import { env } from 'node:process';
 
-import { managers } from './data/managers';
-import { employees } from './data/employees';
-import { clients } from './data/clients';
-import { technicians } from './data/technicians';
+import { managers } from './data/managers.js';
+import { employees } from './data/employees.js';
+import { clients } from './data/clients.js';
+import { technicians } from './data/technicians.js';
 // Create an express application
 const app = express();
 app.use(express.json());
@@ -24,10 +24,11 @@ console.log(env.PORT);
 const processes = { processes: [] };
 const db = await JSONFilePreset('./data/processes.json', processes);
 console.log(db);
+
 //psaxe ton hristi
-app.get('/api/auth/login', async (req, res) => {
-  const { username, password } = req.body;
+app.post('/auth/login', async (req, res) => {
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
+  const { username, password } = req.body;
   const user = possibleUsers.find((u) => u.username === username && u.password === password);
   if (user) {
     res.json(user);
