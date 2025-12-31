@@ -1,10 +1,14 @@
 import express from 'express';
-import { env } from 'node:process';
-import { Pool } from 'pg';
 import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
 import { swaggerOptions } from './swagger.mjs';
+import swaggerUi from 'swagger-ui-express';
+import { JSONFilePreset } from 'lowdb/node';
+import { env } from 'node:process';
 
+import { managers } from './data/managers';
+import { employees } from './data/employees';
+import { clients } from './data/clients';
+import { technicians } from './data/technicians';
 // Create an express application
 const app = express();
 app.use(express.json());
@@ -16,30 +20,19 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 const PORT = env.PORT;
 console.log(env.PORT);
 
-// Database configuration
-const pool = new Pool({
-  user: env.POSTGRES_USER,
-  password: env.POSTGRES_PASSWORD,
-  host: env.POSTGRES_HOST,
-  port: Number(env.POSTGRES_PORT),
-  database: env.POSTGRES_DB,
-});
-
+//lowdb initialisation
+const processes = { processes: [] };
+const db = await JSONFilePreset('./data/processes.json', processes);
+console.log(db);
 //psaxe ton hristi
 app.get('/api/auth/login', async (req, res) => {
   const { username, password } = req.body;
-  try {
-    const result = await pool.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
-    if (result.rows.length === 0) {
-      res.status(401).json({ error: 'Invalid username or password' });
-    } else {
-      const user = result.rows[0];
-      res.json(user);
-      console.log(user);
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error' });
+  const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
+  const user = possibleUsers.find((u) => u.username === username && u.password === password);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(401).json({ error: 'Invalid username or password' });
   }
 });
 

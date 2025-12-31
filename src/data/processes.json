@@ -1,0 +1,113 @@
+[
+  {
+    "processId": 9,
+    "issue": "Battery swelling - Safety hazard",
+    "status": "started",
+    "createdAt": "2025-12-02",
+    "updatedAt": "2025-12-02",
+    "expectedCost": 160,
+    "requiredAction": "changeProcessStatus",
+    "type": "repair",
+    "device": 0,
+    "client": 0,
+    "technician": 0,
+    "employee": null,
+    "notifications": [
+      {
+        "id": 1,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      },
+      {
+        "id": 3,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      }
+    ]
+  },
+  {
+    "processId": 10,
+    "issue": "Screen cracked - Safety hazard",
+    "status": "pending",
+    "createdAt": "2025-12-02",
+    "updatedAt": "2025-12-02",
+    "expectedCost": 160,
+    "requiredAction": "changeProcessStatus",
+    "type": "repair",
+    "device": 1,
+    "client": 0,
+    "technician": null,
+    "employee": 0,
+    "notifications": []
+  },
+  {
+    "processId": 11,
+    "issue": "Battery swelling - Safety hazard",
+    "status": "pending",
+    "createdAt": "2025-12-02",
+    "updatedAt": "2025-12-02",
+    "expectedCost": 160,
+    "requiredAction": "changeProcessStatus",
+    "type": "repair",
+    "device": 2,
+    "client": 0,
+    "technician": 0,
+    "employee": 0,
+    "notifications": [
+      {
+        "id": 1,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      },
+      {
+        "id": 2,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      },
+      {
+        "id": 3,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      },
+      {
+        "id": 4,
+        "title": "Battery swelling - Safety hazard",
+        "message": "The battery is swelling and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      }
+    ]
+  },
+  {
+    "processId": 12,
+    "issue": "Screen cracked - Safety hazard",
+    "status": "pending",
+    "createdAt": "2025-12-02",
+    "updatedAt": "2025-12-02",
+    "expectedCost": 160,
+    "requiredAction": "changeProcessStatus",
+    "type": "repair",
+    "device": 3,
+    "client": 1,
+    "technician": 0,
+    "employee": null,
+    "notifications": [
+      {
+        "id": 1,
+        "title": "Screen cracked - Safety hazard",
+        "message": "The screen is cracked and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      },
+      {
+        "id": 2,
+        "title": "Screen cracked - Safety hazard",
+        "message": "The screen is cracked and is a safety hazard.",
+        "createdAt": "2025-12-02"
+      }
+    ]
+  }
+]

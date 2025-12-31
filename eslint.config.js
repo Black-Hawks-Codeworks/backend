@@ -138,7 +138,12 @@ export default [
       ],
 
       'import/named': ['off'],
-      'import/no-unresolved': ['error'],
+      'import/no-unresolved': [
+        'error',
+        {
+          ignore: ['^lowdb/'],
+        },
+      ],
 
       'import/no-extraneous-dependencies': [
         'warn',
