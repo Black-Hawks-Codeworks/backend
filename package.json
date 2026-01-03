@@ -7,7 +7,7 @@
   "type": "module",
   "main": "index.mjs",
   "scripts": {
-    "dev": "node --watch ./src/index.mjs",
+    "dev": "node --watch -r dotenv/config ./src/index.mjs",
     "start": "node ./src/index.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,6 +26,7 @@
     "@eslint/compat": "^1.4.1",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.39.0",
+    "dotenv": "^16.4.7",
     "eslint": "^9.39.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",

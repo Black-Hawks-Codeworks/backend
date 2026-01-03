@@ -5,6 +5,9 @@ import swaggerUi from 'swagger-ui-express';
 import { JSONFilePreset } from 'lowdb/node';
 import { env } from 'node:process';
 
+import { initialDevices } from './data/devices.js';
+import { initialProcesses } from './data/processes.js';
+
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
@@ -22,9 +25,11 @@ const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
 //lowdb initialisation
+const db = await JSONFilePreset('./data/db.json', {
+  processes: initialProcesses,
+  devices: initialDevices,
+});
 
-const processDb = await JSONFilePreset('./data/processes.json', { processes: [] });
-const deviceDb = await JSONFilePreset('./data/devices.json', { devices: [] });
 //psaxe ton hristi
 app.post('/auth/login', (req, res) => {
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
@@ -38,19 +43,22 @@ app.post('/auth/login', (req, res) => {
 });
 
 app.get('/processes/:userType', (req, res) => {
-  const { userIdString } = req.query;
-  const userId = Number(userIdString);
+  const { userId } = req.query;
+  const userIdNum = userId ? parseInt(userId, 10) : -1;
+  console.log('userId', userIdNum);
   const userType = req.params.userType;
   let data = [];
+  console.log('userType', userType);
+  console.log('userId', userIdNum);
   switch (userType) {
     case 'technician':
-      data = processDb.data.processes.filter((p) => p.technician === userId);
+      data = db.data.processes.filter((p) => p.technician === userIdNum);
       break;
     case 'client':
-      data = processDb.data.processes.filter((p) => p.client === userId);
+      data = db.data.processes.filter((p) => p.client === userIdNum);
       break;
     case 'employee':
-      data = processDb.data.processes.filter((p) => p.employee === userId);
+      data = db.data.processes.filter((p) => p.employee === userIdNum);
       break;
     default:
       data = [];
@@ -76,7 +84,7 @@ app.get('/processes/:userType', (req, res) => {
 
     const deviceObj =
       process.device !== null && process.device !== undefined
-        ? deviceDb.data.devices.find((d) => d.id === process.device) || null
+        ? db.data.devices.find((d) => d.id === process.device) || null
         : null;
 
     return {
