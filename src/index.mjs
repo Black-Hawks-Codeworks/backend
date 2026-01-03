@@ -9,6 +9,7 @@ import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
 import { technicians } from './data/technicians.js';
+
 // Create an express application
 const app = express();
 app.use(express.json());
@@ -17,14 +18,13 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 // Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const PORT = env.PORT;
+const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
 //lowdb initialisation
-const processes = { processes: [] };
-const db = await JSONFilePreset('./data/processes.json', processes);
-console.log(db);
 
+const processDb = await JSONFilePreset('./data/processes.json', { processes: [] });
+const deviceDb = await JSONFilePreset('./data/devices.json', { devices: [] });
 //psaxe ton hristi
 app.post('/auth/login', (req, res) => {
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
@@ -38,24 +38,57 @@ app.post('/auth/login', (req, res) => {
 });
 
 app.get('/processes/:userType', (req, res) => {
-  const { userId } = req.body;
+  const { userIdString } = req.query;
+  const userId = Number(userIdString);
   const userType = req.params.userType;
   let data = [];
   switch (userType) {
     case 'technician':
-      data = db.data.processes.filter((p) => p.technician === userId);
+      data = processDb.data.processes.filter((p) => p.technician === userId);
       break;
     case 'client':
-      data = db.data.processes.filter((p) => p.client === userId);
+      data = processDb.data.processes.filter((p) => p.client === userId);
       break;
     case 'employee':
-      data = db.data.processes.filter((p) => p.employee === userId);
+      data = processDb.data.processes.filter((p) => p.employee === userId);
       break;
     default:
       data = [];
       break;
   }
-  res.json(data);
+  console.log('data', data);
+  // Map processes to include related objects
+  const enrichedData = data.map((process) => {
+    const clientObj =
+      process.client !== null && process.client !== undefined
+        ? clients.find((c) => c.id === process.client) || null
+        : null;
+
+    const technicianObj =
+      process.technician !== null && process.technician !== undefined
+        ? technicians.find((t) => t.id === process.technician) || null
+        : null;
+
+    const employeeObj =
+      process.employee !== null && process.employee !== undefined
+        ? employees.find((e) => e.id === process.employee) || null
+        : null;
+
+    const deviceObj =
+      process.device !== null && process.device !== undefined
+        ? deviceDb.data.devices.find((d) => d.id === process.device) || null
+        : null;
+
+    return {
+      ...process,
+      client: clientObj,
+      technician: technicianObj,
+      employee: employeeObj,
+      device: deviceObj,
+    };
+  });
+  console.log('enrichedData', enrichedData);
+  res.json(enrichedData);
 });
 
 // Listen on selected port

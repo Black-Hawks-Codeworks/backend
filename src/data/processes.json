@@ -9,7 +9,7 @@
     "requiredAction": "changeProcessStatus",
     "type": "repair",
     "device": 0,
-    "client": 0,
+    "client": 1,
     "technician": 0,
     "employee": null,
     "notifications": [
