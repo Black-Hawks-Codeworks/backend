@@ -8,9 +8,9 @@ export const initialProcesses = [
     expectedCost: 160,
     requiredAction: 'changeProcessStatus',
     type: 'repair',
-    device: 0,
+    device: 1,
     client: 1,
-    technician: 0,
+    technician: 2,
     employee: null,
     notifications: [
       {
