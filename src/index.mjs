@@ -97,7 +97,10 @@ app.get('/processes/:userType', (req, res) => {
     };
   });
   console.log('enrichedData', enrichedData);
-  res.json(enrichedData);
+  //simulate a delay
+  setTimeout(() => {
+    res.json(enrichedData);
+  }, 1000);
 });
 
 //one process for a given process id
@@ -133,13 +136,61 @@ app.get('/process/:processId', (req, res) => {
     device: deviceObj,
   };
   if (enrichedProcess) {
-    res.json(enrichedProcess);
+    //simulate a delays
+    setTimeout(() => {
+      res.json(enrichedProcess);
+    }, 1000);
   } else {
     res.status(404).json({ error: 'Process not found' });
   }
-  res.json(process);
 });
 
+//update a process
+app.put('/process/:processId', (req, res) => {
+  const { processId } = req.params;
+  const processIdNum = processId ? parseInt(processId, 10) : -1;
+  const process = db.data.processes.find((p) => p.processId === processIdNum);
+  const { requiredAction } = req.body;
+  if (process) {
+    const updatedProcess = {
+      ...process,
+      requiredAction,
+      updatedAt: new Date().toISOString(),
+    };
+    db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+    //simulate a delay
+    setTimeout(() => {
+      res.json(updatedProcess);
+    }, 1000);
+  } else {
+    res.status(404).json({ error: 'Process not found' });
+  }
+});
+
+//create a new process
+app.post('/process', (req, res) => {
+  const { issue, type, device } = req.body;
+  const newProcess = {
+    processId: db.data.processes.length + 1,
+    issue,
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    expectedCost: 0,
+    requiredAction: 'changeProcessStatus',
+    type,
+    device,
+    client: null,
+    technician: null,
+    employee: null,
+    notifications: [],
+  };
+  db.data.processes.push(newProcess);
+  //simulate a delay
+  setTimeout(() => {
+    res.json(newProcess);
+  }, 1000);
+});
 // Listen on selected port
 // the second argument is a callback function that is called when the server has started
 app.listen(PORT, () => {
