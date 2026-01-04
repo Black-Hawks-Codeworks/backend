@@ -191,11 +191,11 @@ app.put('/process/:processId', (req, res) => {
 
 //create a new process
 app.post('/process', (req, res) => {
-  const { issue, type, deviceName, deviceDescription } = req.body;
+  const { process, device, user } = req.body;
   const newDevice = {
     id: db.data.devices.length + 1,
-    name: deviceName,
-    description: deviceDescription,
+    name: device.name,
+    description: device.description,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     category: 'Phones',
@@ -206,15 +206,15 @@ app.post('/process', (req, res) => {
   db.data.devices.push(newDevice);
   const newProcess = {
     processId: db.data.processes.length + 1,
-    issue,
+    issue: process.issue ?? 'No issue reported',
     status: 'pending',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     expectedCost: 0,
     requiredAction: 'changeProcessStatus',
-    type,
+    type: process.type ?? 'repair',
     device: newDevice.id,
-    client: null,
+    client: user.id,
     technician: null,
     employee: null,
     notifications: [],
