@@ -253,16 +253,14 @@ app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
       }
     }
   }
-
-  // Store photo as single object (not array)
+  // store photo
   const photoUrl = `/photos/${req.file.filename}`;
   device.image = {
     filename: req.file.filename,
     url: photoUrl,
     uploadedAt: new Date().toISOString(),
   };
-
-  // Save to database
+  // save to database
   db.write();
 
   res.json({
