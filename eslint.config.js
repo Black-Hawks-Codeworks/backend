@@ -74,7 +74,7 @@ export default [
       eqeqeq: ['error', 'always'],
       'prefer-const': ['warn'],
       'object-shorthand': [
-        'error',
+        'off',
         'always',
         {
           avoidExplicitReturnArrows: true,
