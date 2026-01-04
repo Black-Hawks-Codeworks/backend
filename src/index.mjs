@@ -4,7 +4,9 @@ import { swaggerOptions } from './swagger.mjs';
 import swaggerUi from 'swagger-ui-express';
 import { JSONFilePreset } from 'lowdb/node';
 import { env } from 'node:process';
-
+import path from 'path';
+import { __dirname, upload } from './multer.js';
+import fs from 'fs';
 import { initialDevices } from './data/devices.js';
 import { initialProcesses } from './data/processes.js';
 
@@ -103,7 +105,7 @@ app.get('/processes/:userType', (req, res) => {
   }, 1000);
 });
 
-//one process for a given process id
+//get one process for a given process id
 app.get('/process/:processId', (req, res) => {
   const { processId } = req.params;
   const processIdNum = processId ? parseInt(processId, 10) : -1;
@@ -169,7 +171,18 @@ app.put('/process/:processId', (req, res) => {
 
 //create a new process
 app.post('/process', (req, res) => {
-  const { issue, type, device } = req.body;
+  const { issue, type, deviceName, deviceDescription } = req.body;
+  const newDevice = {
+    deviceId: db.data.devices.length + 1,
+    name: deviceName,
+    description: deviceDescription,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    category: 'Phones',
+    warrantyType: 'basic',
+    warrantyExpires: '2026-12-02',
+    image: [{ image: 'oneplus.jpg' }],
+  };
   const newProcess = {
     processId: db.data.processes.length + 1,
     issue,
@@ -179,7 +192,7 @@ app.post('/process', (req, res) => {
     expectedCost: 0,
     requiredAction: 'changeProcessStatus',
     type,
-    device,
+    device: newDevice.deviceId,
     client: null,
     technician: null,
     employee: null,
@@ -191,6 +204,50 @@ app.post('/process', (req, res) => {
     res.json(newProcess);
   }, 1000);
 });
+
+// Upload photo for a process
+app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
+  const { deviceId } = req.params;
+  const deviceIdNum = parseInt(deviceId, 10);
+
+  if (!req.file) {
+    return res.status(400).json({ error: 'No photo file provided' });
+  }
+
+  const device = db.data.devices.find((d) => d.deviceId === deviceIdNum);
+  if (!device) {
+    // Delete uploaded file if device doesn't exist
+    fs.unlinkSync(req.file.path);
+    return res.status(404).json({ error: 'Device not found' });
+  }
+
+  // Store photo filename in process (you might want to add a photos array)
+  const photoUrl = `/photos/${req.file.filename}`;
+
+  // Update process with photo information
+  if (!device.photos) {
+    device.photos = [];
+  }
+  device.photos.push({
+    filename: req.file.filename,
+    url: photoUrl,
+    uploadedAt: new Date().toISOString(),
+  });
+
+  // Save to database
+  db.write();
+
+  res.json({
+    message: 'Photo uploaded successfully',
+    photo: {
+      filename: req.file.filename,
+      url: photoUrl,
+    },
+  });
+});
+
+// Serve static files from photos directory
+app.use('/photos', express.static(path.join(__dirname, 'data', 'photos')));
 // Listen on selected port
 // the second argument is a callback function that is called when the server has started
 app.listen(PORT, () => {

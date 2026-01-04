@@ -5,7 +5,7 @@ export const initialDevices = [
     category: 'Phones',
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
-    image: [{ image: 'oneplus.jpg' }],
+    image: { image: 'oneplus.jpg' },
   },
   {
     id: 2,
@@ -13,7 +13,7 @@ export const initialDevices = [
     category: 'Phones',
     warrantyType: 'premium',
     warrantyExpires: '2027-05-18',
-    image: [{ image: 'samsungalgalaxyS23.jpg' }],
+    image: { image: 'samsungalgalaxyS23.jpg' },
   },
   {
     id: 3,
@@ -21,7 +21,7 @@ export const initialDevices = [
     category: 'Laptops',
     warrantyType: 'extended',
     warrantyExpires: '2028-01-10',
-    image: [{ image: 'macbook.jpg' }],
+    image: { image: 'macbook.jpg' },
   },
   {
     id: 4,
@@ -29,7 +29,7 @@ export const initialDevices = [
     category: 'Tablets',
     warrantyType: 'basic',
     warrantyExpires: '2026-06-30',
-    image: [{ image: 'samsunggalaxyTabS8.jpg' }],
+    image: { image: 'samsunggalaxyTabS8.jpg' },
   },
   {
     id: 5,
@@ -37,6 +37,6 @@ export const initialDevices = [
     category: 'Printers',
     warrantyType: 'basic',
     warrantyExpires: '2026-10-15',
-    image: [{ image: 'canonPixmaPrinter.jpg' }],
+    image: { image: 'canonPixmaPrinter.jpg' },
   },
 ];
