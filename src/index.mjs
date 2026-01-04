@@ -243,31 +243,31 @@ app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
   }
 
   // Delete old photo file if it exists
-  if (device.image && device.image.filename) {
-    const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
-    if (fs.existsSync(oldPhotoPath)) {
-      try {
-        fs.unlinkSync(oldPhotoPath);
-      } catch (err) {
-        console.error('Error deleting old photo:', err);
-      }
-    }
-  }
+  // if (device.image && device.image.filename) {
+  //   const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
+  //   if (fs.existsSync(oldPhotoPath)) {
+  //     try {
+  //       fs.unlinkSync(oldPhotoPath);
+  //     } catch (err) {
+  //       console.error('Error deleting old photo:', err);
+  //     }
+  //   }
+  // }
   // store photo
-  const photoUrl = `/photos/${req.file.filename}`;
-  device.image = {
-    filename: req.file.filename,
-    url: photoUrl,
-    uploadedAt: new Date().toISOString(),
-  };
-  // save to database
-  db.write();
+  // const photoUrl = `/photos/${req.file.filename}`;
+  // device.image = {
+  //   filename: req.file.filename,
+  //   url: photoUrl,
+  //   uploadedAt: new Date().toISOString(),
+  // };
+  // // save to database
+  // db.write();
 
   res.json({
     message: 'Photo uploaded successfully',
     photo: {
       filename: req.file.filename,
-      url: photoUrl,
+      // url: photoUrl,
     },
   });
 });
