@@ -42,6 +42,7 @@ app.post('/auth/login', (req, res) => {
   }
 });
 
+//all processes for a given user type
 app.get('/processes/:userType', (req, res) => {
   const { userId } = req.query;
   const userIdNum = userId ? parseInt(userId, 10) : -1;
@@ -97,6 +98,46 @@ app.get('/processes/:userType', (req, res) => {
   });
   console.log('enrichedData', enrichedData);
   res.json(enrichedData);
+});
+
+//one process for a given process id
+app.get('/process/:processId', (req, res) => {
+  const { processId } = req.params;
+  const processIdNum = processId ? parseInt(processId, 10) : -1;
+  const process = db.data.processes.find((p) => p.processId === processIdNum);
+  const clientObj =
+    process.client !== null && process.client !== undefined
+      ? clients.find((c) => c.id === process.client) || null
+      : null;
+
+  const technicianObj =
+    process.technician !== null && process.technician !== undefined
+      ? technicians.find((t) => t.id === process.technician) || null
+      : null;
+
+  const employeeObj =
+    process.employee !== null && process.employee !== undefined
+      ? employees.find((e) => e.id === process.employee) || null
+      : null;
+
+  const deviceObj =
+    process.device !== null && process.device !== undefined
+      ? db.data.devices.find((d) => d.id === process.device) || null
+      : null;
+
+  const enrichedProcess = {
+    ...process,
+    client: clientObj,
+    technician: technicianObj,
+    employee: employeeObj,
+    device: deviceObj,
+  };
+  if (enrichedProcess) {
+    res.json(enrichedProcess);
+  } else {
+    res.status(404).json({ error: 'Process not found' });
+  }
+  res.json(process);
 });
 
 // Listen on selected port
