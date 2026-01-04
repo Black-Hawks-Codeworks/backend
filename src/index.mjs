@@ -140,7 +140,7 @@ app.get('/process/:processId', (req, res) => {
   // Enrich device with photo URL if image exists
   let enrichedDeviceObj = deviceObj;
   if (deviceObj && deviceObj.image && deviceObj.image.filename) {
-    const photoUrl = `${req.protocol}://${req.get('host')}/photos/${deviceObj.image.filename}`;
+    const photoUrl = `/photos/${deviceObj.image.filename}`;
     enrichedDeviceObj = {
       ...deviceObj,
       image: {
