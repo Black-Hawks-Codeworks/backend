@@ -90,12 +90,19 @@ app.get('/processes/:userType', (req, res) => {
         ? db.data.devices.find((d) => d.id === process.device) || null
         : null;
 
+    // Exclude image field from device object in list endpoint
+    let deviceWithoutImage = deviceObj;
+    if (deviceObj && deviceObj.image) {
+      deviceWithoutImage = { ...deviceObj };
+      delete deviceWithoutImage.image;
+    }
+
     return {
       ...process,
       client: clientObj,
       technician: technicianObj,
       employee: employeeObj,
-      device: deviceObj,
+      device: deviceWithoutImage,
     };
   });
   console.log('enrichedData', enrichedData);
@@ -130,12 +137,25 @@ app.get('/process/:processId', (req, res) => {
       ? db.data.devices.find((d) => d.id === process.device) || null
       : null;
 
+  // Enrich device with photo URL if image exists
+  let enrichedDeviceObj = deviceObj;
+  if (deviceObj && deviceObj.image && deviceObj.image.filename) {
+    const photoUrl = `${req.protocol}://${req.get('host')}/photos/${deviceObj.image.filename}`;
+    enrichedDeviceObj = {
+      ...deviceObj,
+      image: {
+        ...deviceObj.image,
+        url: photoUrl,
+      },
+    };
+  }
+
   const enrichedProcess = {
     ...process,
     client: clientObj,
     technician: technicianObj,
     employee: employeeObj,
-    device: deviceObj,
+    device: enrichedDeviceObj,
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -173,7 +193,7 @@ app.put('/process/:processId', (req, res) => {
 app.post('/process', (req, res) => {
   const { issue, type, deviceName, deviceDescription } = req.body;
   const newDevice = {
-    deviceId: db.data.devices.length + 1,
+    id: db.data.devices.length + 1,
     name: deviceName,
     description: deviceDescription,
     createdAt: new Date().toISOString(),
@@ -181,8 +201,9 @@ app.post('/process', (req, res) => {
     category: 'Phones',
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
-    image: [{ image: 'oneplus.jpg' }],
+    image: null,
   };
+  db.data.devices.push(newDevice);
   const newProcess = {
     processId: db.data.processes.length + 1,
     issue,
@@ -192,7 +213,7 @@ app.post('/process', (req, res) => {
     expectedCost: 0,
     requiredAction: 'changeProcessStatus',
     type,
-    device: newDevice.deviceId,
+    device: newDevice.id,
     client: null,
     technician: null,
     employee: null,
@@ -205,7 +226,7 @@ app.post('/process', (req, res) => {
   }, 1000);
 });
 
-// Upload photo for a process
+// Upload photo for a device
 app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
   const { deviceId } = req.params;
   const deviceIdNum = parseInt(deviceId, 10);
@@ -214,25 +235,32 @@ app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
     return res.status(400).json({ error: 'No photo file provided' });
   }
 
-  const device = db.data.devices.find((d) => d.deviceId === deviceIdNum);
+  const device = db.data.devices.find((d) => d.id === deviceIdNum || d.deviceId === deviceIdNum);
   if (!device) {
     // Delete uploaded file if device doesn't exist
     fs.unlinkSync(req.file.path);
     return res.status(404).json({ error: 'Device not found' });
   }
 
-  // Store photo filename in process (you might want to add a photos array)
-  const photoUrl = `/photos/${req.file.filename}`;
-
-  // Update process with photo information
-  if (!device.photos) {
-    device.photos = [];
+  // Delete old photo file if it exists
+  if (device.image && device.image.filename) {
+    const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
+    if (fs.existsSync(oldPhotoPath)) {
+      try {
+        fs.unlinkSync(oldPhotoPath);
+      } catch (err) {
+        console.error('Error deleting old photo:', err);
+      }
+    }
   }
-  device.photos.push({
+
+  // Store photo as single object (not array)
+  const photoUrl = `/photos/${req.file.filename}`;
+  device.image = {
     filename: req.file.filename,
     url: photoUrl,
     uploadedAt: new Date().toISOString(),
-  });
+  };
 
   // Save to database
   db.write();

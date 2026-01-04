@@ -5,7 +5,7 @@ import fs from 'fs';
 
 // Get directory paths for ES modules
 export const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export const __dirname = path.dirname(__filename);
 
 // Configure multer for file storage
 export const storage = multer.diskStorage({

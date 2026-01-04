@@ -5,7 +5,11 @@ export const initialDevices = [
     category: 'Phones',
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
-    image: { image: 'oneplus.jpg' },
+    image: {
+      filename: 'oneplus.png',
+      url: '/photos/oneplus.png',
+      uploadedAt: '2025-01-01T00:00:00.000Z',
+    },
   },
   {
     id: 2,
@@ -13,7 +17,11 @@ export const initialDevices = [
     category: 'Phones',
     warrantyType: 'premium',
     warrantyExpires: '2027-05-18',
-    image: { image: 'samsungalgalaxyS23.jpg' },
+    image: {
+      filename: 'samsungalaxy-S23.jpg',
+      url: '/photos/samsungalaxy-S23.jpg',
+      uploadedAt: '2025-01-01T00:00:00.000Z',
+    },
   },
   {
     id: 3,
@@ -21,7 +29,11 @@ export const initialDevices = [
     category: 'Laptops',
     warrantyType: 'extended',
     warrantyExpires: '2028-01-10',
-    image: { image: 'macbook.jpg' },
+    image: {
+      filename: 'macbook.png',
+      url: '/photos/macbook.png',
+      uploadedAt: '2025-01-01T00:00:00.000Z',
+    },
   },
   {
     id: 4,
@@ -29,7 +41,7 @@ export const initialDevices = [
     category: 'Tablets',
     warrantyType: 'basic',
     warrantyExpires: '2026-06-30',
-    image: { image: 'samsunggalaxyTabS8.jpg' },
+    image: null,
   },
   {
     id: 5,
@@ -37,6 +49,6 @@ export const initialDevices = [
     category: 'Printers',
     warrantyType: 'basic',
     warrantyExpires: '2026-10-15',
-    image: { image: 'canonPixmaPrinter.jpg' },
+    image: null,
   },
 ];
