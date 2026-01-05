@@ -222,52 +222,7 @@ app.put('/process/:processId', async (req, res) => {
     return res.status(400).json({ error: 'Invalid required action' });
   }
   if (process) {
-    // Technician adds cost
-    if (newRequiredAction === 'addCost') {
-      const updatedProcess = {
-        ...process,
-        status: 'cost_added',
-        expectedCost: expectedCost,
-        updatedAt: new Date().toISOString(),
-        notifications: [
-          ...process.notifications,
-          {
-            id: process.notifications.length + 1,
-            title: 'Cost Added',
-            message: `Additional cost of ${expectedCost}€ required`,
-            createdAt: new Date().toISOString(),
-          },
-        ],
-      };
-      db.data.processes = db.data.processes.map((p) =>
-        p.processId === processIdNum ? updatedProcess : p
-      );
-      await db.write();
-      return res.json(updatedProcess);
-    }
-
-    // Customer accepts payment
-    if (newRequiredAction === 'paymentAccept') {
-      const updatedProcess = {
-        ...process,
-        status: 'confirmed',
-        updatedAt: new Date().toISOString(),
-        notifications: [
-          ...process.notifications,
-          {
-            id: process.notifications.length + 1,
-            title: 'Payment Accepted',
-            message: 'Customer accepted the additional cost',
-            createdAt: new Date().toISOString(),
-          },
-        ],
-      };
-      db.data.processes = db.data.processes.map((p) =>
-        p.processId === processIdNum ? updatedProcess : p
-      );
-      await db.write();
-      return res.json(updatedProcess);
-    }
+    
     // change process status
     if (newRequiredAction === 'changeProcessStatus') {
       if (process.status === 'started') {
