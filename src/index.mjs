@@ -222,7 +222,6 @@ app.put('/process/:processId', async (req, res) => {
     return res.status(400).json({ error: 'Invalid required action' });
   }
   if (process) {
-    
     // change process status
     if (newRequiredAction === 'changeProcessStatus') {
       if (process.status === 'started') {
