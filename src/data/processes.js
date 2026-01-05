@@ -1,6 +1,3 @@
-
-
-
 export const initialProcesses = [
   {
     processId: 9,
@@ -9,7 +6,7 @@ export const initialProcesses = [
     createdAt: '2025-12-02',
     updatedAt: '2025-12-02',
     expectedCost: 160,
-    requiredAction: 'changeProcessStatus',
+    requiredAction: 'paymentRequired',
     type: 'repair',
     device: 1,
     client: 1,
@@ -111,7 +108,7 @@ export const initialProcesses = [
         message: 'The screen is cracked and is a safety hazard.',
         createdAt: '2025-12-02',
       },
-    ]
+    ],
   },
   {
     processId: 13,
@@ -127,7 +124,7 @@ export const initialProcesses = [
     technician: 1,
     employee: 1,
     notifications: [
-      { id: 1, title: 'Check-in', message: 'Device received for water damage assessment.', createdAt: '2026-01-02' }
+      { id: 1, title: 'Check-in', message: 'Device received for water damage assessment.', createdAt: '2026-01-02' },
     ],
   },
   {
@@ -144,7 +141,7 @@ export const initialProcesses = [
     technician: 1,
     employee: null,
     notifications: [
-      { id: 1, title: 'Parts ordered', message: 'New charging port on the way.', createdAt: '2026-01-03' }
+      { id: 1, title: 'Parts ordered', message: 'New charging port on the way.', createdAt: '2026-01-03' },
     ],
   },
   {
@@ -161,7 +158,7 @@ export const initialProcesses = [
     technician: 2,
     employee: 0,
     notifications: [
-      { id: 1, title: 'Analysis', message: 'Full keyboard replacement quoted.', createdAt: '2026-01-03' }
+      { id: 1, title: 'Analysis', message: 'Full keyboard replacement quoted.', createdAt: '2026-01-03' },
     ],
   },
   {
@@ -177,9 +174,7 @@ export const initialProcesses = [
     client: 1,
     technician: 1,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Software', message: 'Attempting firmware re-flash.', createdAt: '2026-01-03' }
-    ],
+    notifications: [{ id: 1, title: 'Software', message: 'Attempting firmware re-flash.', createdAt: '2026-01-03' }],
   },
   {
     processId: 17,
@@ -195,7 +190,7 @@ export const initialProcesses = [
     technician: 1,
     employee: 1,
     notifications: [
-      { id: 1, title: 'Thermal', message: 'High temperatures confirmed during stress test.', createdAt: '2026-01-03' }
+      { id: 1, title: 'Thermal', message: 'High temperatures confirmed during stress test.', createdAt: '2026-01-03' },
     ],
   },
   {
@@ -211,9 +206,7 @@ export const initialProcesses = [
     client: 0,
     technician: 2,
     employee: 0,
-    notifications: [
-      { id: 1, title: 'Fixed', message: 'Lens replaced and sensor cleaned.', createdAt: '2026-01-02' }
-    ],
+    notifications: [{ id: 1, title: 'Fixed', message: 'Lens replaced and sensor cleaned.', createdAt: '2026-01-02' }],
   },
   {
     processId: 19,
@@ -229,7 +222,7 @@ export const initialProcesses = [
     technician: 1,
     employee: null,
     notifications: [
-      { id: 1, title: 'Audio Test', message: 'Microphone hardware failure detected.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Audio Test', message: 'Microphone hardware failure detected.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -246,7 +239,7 @@ export const initialProcesses = [
     technician: 2,
     employee: null,
     notifications: [
-      { id: 1, title: 'Antenna', message: 'Opening device to access signal flex.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Antenna', message: 'Opening device to access signal flex.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -262,9 +255,7 @@ export const initialProcesses = [
     client: 0,
     technician: 1,
     employee: 0,
-    notifications: [
-      { id: 1, title: 'Cosmetic', message: 'Awaiting back glass part.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Cosmetic', message: 'Awaiting back glass part.', createdAt: '2026-01-04' }],
   },
   {
     processId: 22,
@@ -279,9 +270,7 @@ export const initialProcesses = [
     client: 1,
     technician: 2,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Critical', message: 'Major board work required.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Critical', message: 'Major board work required.', createdAt: '2026-01-04' }],
   },
   {
     processId: 23,
@@ -297,7 +286,7 @@ export const initialProcesses = [
     technician: 1,
     employee: null,
     notifications: [
-      { id: 1, title: 'Cleaning', message: 'Removing debris from speaker grille.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Cleaning', message: 'Removing debris from speaker grille.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -314,7 +303,7 @@ export const initialProcesses = [
     technician: 1,
     employee: 0,
     notifications: [
-      { id: 1, title: 'Biometrics', message: 'New flex cable assembly needed.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Biometrics', message: 'New flex cable assembly needed.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -330,9 +319,7 @@ export const initialProcesses = [
     client: 1,
     technician: 2,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Data', message: 'Drive not mounting in recovery mode.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Data', message: 'Drive not mounting in recovery mode.', createdAt: '2026-01-04' }],
   },
   {
     processId: 26,
@@ -347,9 +334,7 @@ export const initialProcesses = [
     client: 2,
     technician: 1,
     employee: 1,
-    notifications: [
-      { id: 1, title: 'Face ID', message: 'Testing infrared sensors.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Face ID', message: 'Testing infrared sensors.', createdAt: '2026-01-04' }],
   },
   {
     processId: 27,
@@ -364,9 +349,7 @@ export const initialProcesses = [
     client: 0,
     technician: 1,
     employee: 0,
-    notifications: [
-      { id: 1, title: 'Wireless', message: 'Signal drops after 2 meters.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Wireless', message: 'Signal drops after 2 meters.', createdAt: '2026-01-04' }],
   },
   {
     processId: 28,
@@ -382,7 +365,7 @@ export const initialProcesses = [
     technician: 1,
     employee: null,
     notifications: [
-      { id: 1, title: 'Sensor', message: 'Sensor blocked by screen protector.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Sensor', message: 'Sensor blocked by screen protector.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -398,9 +381,7 @@ export const initialProcesses = [
     client: 2,
     technician: 2,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Haptics', message: 'Engine disconnected internally.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Haptics', message: 'Engine disconnected internally.', createdAt: '2026-01-04' }],
   },
   {
     processId: 30,
@@ -409,14 +390,14 @@ export const initialProcesses = [
     createdAt: '2026-01-04',
     updatedAt: '2026-01-04',
     expectedCost: 65,
-    requiredAction: 'changeProcessStatus',
+    requiredAction: '',
     type: 'repair',
     device: 3,
     client: 0,
     technician: 1,
     employee: 0,
     notifications: [
-      { id: 1, title: 'Storage', message: 'Awaiting mechanical pin adjustment tool.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Storage', message: 'Awaiting mechanical pin adjustment tool.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -432,9 +413,7 @@ export const initialProcesses = [
     client: 1,
     technician: 1,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Done', message: 'Tray removed and cleaned.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Done', message: 'Tray removed and cleaned.', createdAt: '2026-01-04' }],
   },
   {
     processId: 32,
@@ -450,7 +429,7 @@ export const initialProcesses = [
     technician: 2,
     employee: null,
     notifications: [
-      { id: 1, title: 'Wi-Fi', message: 'Integrated circuit requires reballing.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Wi-Fi', message: 'Integrated circuit requires reballing.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -467,7 +446,7 @@ export const initialProcesses = [
     technician: 1,
     employee: 0,
     notifications: [
-      { id: 1, title: 'Buttons', message: 'Opening frame to clean button switch.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Buttons', message: 'Opening frame to clean button switch.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -483,9 +462,7 @@ export const initialProcesses = [
     client: 1,
     technician: 1,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Parts', message: 'Volume flex cable is out of stock.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Parts', message: 'Volume flex cable is out of stock.', createdAt: '2026-01-04' }],
   },
   {
     processId: 35,
@@ -500,9 +477,7 @@ export const initialProcesses = [
     client: 2,
     technician: 2,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Audio', message: 'Lint removed from jack.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Audio', message: 'Lint removed from jack.', createdAt: '2026-01-04' }],
   },
   {
     processId: 36,
@@ -517,9 +492,7 @@ export const initialProcesses = [
     client: 1,
     technician: 1,
     employee: null,
-    notifications: [
-      { id: 1, title: 'Cleaning', message: 'Starting ultrasound bath cycle.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Cleaning', message: 'Starting ultrasound bath cycle.', createdAt: '2026-01-04' }],
   },
   {
     processId: 37,
@@ -535,7 +508,7 @@ export const initialProcesses = [
     technician: 2,
     employee: null,
     notifications: [
-      { id: 1, title: 'Display', message: 'Testing display backlight filters.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Display', message: 'Testing display backlight filters.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -551,9 +524,7 @@ export const initialProcesses = [
     client: 2,
     technician: 1,
     employee: 1,
-    notifications: [
-      { id: 1, title: 'NFC', message: 'Testing NFC coil on back cover.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'NFC', message: 'Testing NFC coil on back cover.', createdAt: '2026-01-04' }],
   },
   {
     processId: 39,
@@ -568,9 +539,7 @@ export const initialProcesses = [
     client: 0,
     technician: 1,
     employee: 0,
-    notifications: [
-      { id: 1, title: 'Done', message: 'Mesh replaced and earpiece tested.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Done', message: 'Mesh replaced and earpiece tested.', createdAt: '2026-01-04' }],
   },
   {
     processId: 40,
@@ -586,7 +555,7 @@ export const initialProcesses = [
     technician: 2,
     employee: null,
     notifications: [
-      { id: 1, title: 'Screen', message: 'Ghost touches confirmed in diagnostics.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Screen', message: 'Ghost touches confirmed in diagnostics.', createdAt: '2026-01-04' },
     ],
   },
   {
@@ -602,9 +571,7 @@ export const initialProcesses = [
     client: 2,
     technician: 1,
     employee: 1,
-    notifications: [
-      { id: 1, title: 'Power', message: 'Measuring amperage during standby.', createdAt: '2026-01-04' }
-    ],
+    notifications: [{ id: 1, title: 'Power', message: 'Measuring amperage during standby.', createdAt: '2026-01-04' }],
   },
   {
     processId: 42,
@@ -620,7 +587,7 @@ export const initialProcesses = [
     technician: 2,
     employee: 0,
     notifications: [
-      { id: 1, title: 'Sensor', message: 'IR sensor not responding to stimuli.', createdAt: '2026-01-04' }
+      { id: 1, title: 'Sensor', message: 'IR sensor not responding to stimuli.', createdAt: '2026-01-04' },
     ],
   },
 ];
