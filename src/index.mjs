@@ -288,7 +288,7 @@ app.post('/process', async (req, res) => {
     description: device.description,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    category: 'Phones',
+    category: device.category,
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
     image: null,
@@ -331,7 +331,7 @@ app.post('/process', async (req, res) => {
 });
 
 // Upload photo for a device
-app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
+app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => {
   const { deviceId } = req.params;
   const deviceIdNum = parseInt(deviceId, 10);
 
@@ -347,25 +347,25 @@ app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
   }
 
   // Delete old photo file if it exists
-  // if (device.image && device.image.filename) {
-  //   const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
-  //   if (fs.existsSync(oldPhotoPath)) {
-  //     try {
-  //       fs.unlinkSync(oldPhotoPath);
-  //     } catch (err) {
-  //       console.error('Error deleting old photo:', err);
-  //     }
-  //   }
-  // }
-  // store photo
-  // const photoUrl = `/photos/${req.file.filename}`;
-  // device.image = {
-  //   filename: req.file.filename,
-  //   url: photoUrl,
-  //   uploadedAt: new Date().toISOString(),
-  // };
-  // // save to database
-  // db.write();
+  if (device.image && device.image.filename) {
+  const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
+     if (fs.existsSync(oldPhotoPath)) {
+       try {
+         fs.unlinkSync(oldPhotoPath);
+       } catch (err) {
+         console.error('Error deleting old photo:', err);
+       }
+     }
+   }
+ //store photo
+   const photoUrl = `/photos/${req.file.filename}`;
+   device.image = {
+     filename: req.file.filename,
+    url: photoUrl,
+     uploadedAt: new Date().toISOString(),
+  };
+  // save to database
+  await db.write();
 
   res.json({
     message: 'Photo uploaded successfully',
