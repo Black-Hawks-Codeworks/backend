@@ -182,8 +182,8 @@ app.put('/process/:processId', async (req, res) => {
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   const { newRequiredAction } = req.body;
   //pithana actions
-  const possibleNotifications = ['noActionRequired', 'paymentRequired', 'changeProcessStatus', 'confirmReplacement'];
-  if (!possibleNotifications.includes(newRequiredAction)) {
+  const possibleActions = ['noActionRequired', 'paymentRequired', 'changeProcessStatus', 'confirmReplacement'];
+  if (!possibleActions.includes(newRequiredAction)) {
     return res.status(400).json({ error: 'Invalid required action' });
   }
   if (process) {
