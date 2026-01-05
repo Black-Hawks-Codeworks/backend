@@ -3,9 +3,9 @@
     {
       "processId": 9,
       "issue": "Battery swelling - Safety hazard",
-      "status": "confirmed",
+      "status": "started",
       "createdAt": "2025-12-02",
-      "updatedAt": "2026-01-05T21:39:46.334Z",
+      "updatedAt": "2025-12-02",
       "expectedCost": 160,
       "requiredAction": "paymentRequired",
       "type": "repair",
@@ -25,27 +25,15 @@
           "title": "Battery swelling - Safety hazard",
           "message": "The battery is swelling and is a safety hazard.",
           "createdAt": "2025-12-02"
-        },
-        {
-          "id": 3,
-          "title": "Cost Added",
-          "message": "Additional cost of 160€ required",
-          "createdAt": "2026-01-05T21:39:27.519Z"
-        },
-        {
-          "id": 4,
-          "title": "Payment Accepted",
-          "message": "Customer accepted the additional cost",
-          "createdAt": "2026-01-05T21:39:46.334Z"
         }
       ]
     },
     {
       "processId": 10,
       "issue": "Screen cracked - Safety hazard",
-      "status": "confirmed",
+      "status": "completed",
       "createdAt": "2025-12-02",
-      "updatedAt": "2025-12-02",
+      "updatedAt": "2026-01-05T22:22:41.815Z",
       "expectedCost": 160,
       "requiredAction": "changeProcessStatus",
       "type": "repair",
@@ -53,14 +41,27 @@
       "client": 0,
       "technician": 1,
       "employee": 0,
-      "notifications": []
+      "notifications": [
+        {
+          "id": 1,
+          "title": "Process updated",
+          "message": "Your Process repaired",
+          "createdAt": "2026-01-05T22:22:38.722Z"
+        },
+        {
+          "id": 2,
+          "title": "Process updated",
+          "message": "Your Process completed",
+          "createdAt": "2026-01-05T22:22:41.815Z"
+        }
+      ]
     },
     {
       "processId": 11,
       "issue": "Battery swelling - Safety hazard",
-      "status": "completed",
+      "status": "confirmed",
       "createdAt": "2025-12-02",
-      "updatedAt": "2026-01-05T21:45:39.295Z",
+      "updatedAt": "2025-12-02",
       "expectedCost": 160,
       "requiredAction": "changeProcessStatus",
       "type": "repair",
@@ -92,18 +93,6 @@
           "title": "Battery swelling - Safety hazard",
           "message": "The battery is swelling and is a safety hazard.",
           "createdAt": "2025-12-02"
-        },
-        {
-          "id": 5,
-          "title": "Process updated",
-          "message": "Your Process repaired",
-          "createdAt": "2026-01-05T21:45:33.896Z"
-        },
-        {
-          "id": 6,
-          "title": "Process updated",
-          "message": "Your Process completed",
-          "createdAt": "2026-01-05T21:45:39.295Z"
         }
       ]
     },
