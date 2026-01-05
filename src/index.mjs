@@ -27,10 +27,20 @@ const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
 //lowdb initialisation
-const db = await JSONFilePreset('./data/db.json', {
-  processes: initialProcesses,
-  devices: initialDevices,
+// Use absolute path and ensure directory exists
+const dbPath = path.join(__dirname, 'data', 'db.json');
+const dataDir = path.dirname(dbPath);
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+const db = await JSONFilePreset(dbPath, {
+  processes: [],
+  devices: [],
 });
+
+db.data.processes.push(...initialProcesses);
+db.data.devices.push(...initialDevices);
+await db.write();
 
 //psaxe ton hristi
 app.post('/auth/login', (req, res) => {
@@ -67,7 +77,6 @@ app.get('/processes/:userType', (req, res) => {
       data = [];
       break;
   }
-  console.log('data', data);
   // Map processes to include related objects
   const enrichedData = data.map((process) => {
     const clientObj =
@@ -105,7 +114,6 @@ app.get('/processes/:userType', (req, res) => {
       device: deviceWithoutImage,
     };
   });
-  console.log('enrichedData', enrichedData);
   //simulate a delay
   setTimeout(() => {
     res.json(enrichedData);
@@ -168,7 +176,7 @@ app.get('/process/:processId', (req, res) => {
 });
 
 //update a process
-app.put('/process/:processId', (req, res) => {
+app.put('/process/:processId', async (req, res) => {
   const { processId } = req.params;
   const processIdNum = processId ? parseInt(processId, 10) : -1;
   const process = db.data.processes.find((p) => p.processId === processIdNum);
@@ -197,6 +205,7 @@ app.put('/process/:processId', (req, res) => {
           ],
         };
         db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+        await db.write();
         setTimeout(() => {
           res.json(updatedProcess);
         }, 1000);
@@ -216,6 +225,7 @@ app.put('/process/:processId', (req, res) => {
           ],
         };
         db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+        await db.write();
         setTimeout(() => {
           res.json(updatedProcess);
         }, 1000);
@@ -235,6 +245,7 @@ app.put('/process/:processId', (req, res) => {
           ],
         };
         db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+        await db.write();
         setTimeout(() => {
           res.json(updatedProcess);
         }, 1000);
@@ -257,11 +268,11 @@ app.put('/process/:processId', (req, res) => {
         ],
       };
       db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+      await db.write();
       setTimeout(() => {
         res.json(updatedProcess);
       }, 1000);
     }
-    db.write();
   } else {
     res.status(404).json({ error: 'Process not found' });
   }
