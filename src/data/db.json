@@ -31,9 +31,9 @@
     {
       "processId": 10,
       "issue": "Screen cracked - Safety hazard",
-      "status": "confirmed",
+      "status": "repaired",
       "createdAt": "2025-12-02",
-      "updatedAt": "2025-12-02",
+      "updatedAt": "2026-01-05T19:37:19.782Z",
       "expectedCost": 160,
       "requiredAction": "changeProcessStatus",
       "type": "repair",
@@ -41,7 +41,14 @@
       "client": 0,
       "technician": 1,
       "employee": 0,
-      "notifications": []
+      "notifications": [
+        {
+          "id": 1,
+          "title": "Process updated",
+          "message": "Your Process repaired",
+          "createdAt": "2026-01-05T19:37:19.782Z"
+        }
+      ]
     },
     {
       "processId": 11,
@@ -88,7 +95,7 @@
       "issue": "Screen cracked - Safety hazard",
       "status": "completed",
       "createdAt": "2025-12-02",
-      "updatedAt": "2026-01-05T15:22:24.213Z",
+      "updatedAt": "2026-01-05T15:58:29.631Z",
       "expectedCost": 160,
       "requiredAction": "changeProcessStatus",
       "type": "repair",
@@ -113,13 +120,13 @@
           "id": 3,
           "title": "Process updated",
           "message": "Your Process repaired",
-          "createdAt": "2026-01-05T15:22:16.217Z"
+          "createdAt": "2026-01-05T15:58:25.908Z"
         },
         {
           "id": 4,
           "title": "Process updated",
           "message": "Your Process completed",
-          "createdAt": "2026-01-05T15:22:24.213Z"
+          "createdAt": "2026-01-05T15:58:29.631Z"
         }
       ]
     },
@@ -148,9 +155,9 @@
     {
       "processId": 14,
       "issue": "Broken charging port - Pins bent",
-      "status": "repaired",
+      "status": "started",
       "createdAt": "2026-01-02",
-      "updatedAt": "2026-01-05T15:26:58.000Z",
+      "updatedAt": "2026-01-03",
       "expectedCost": 45,
       "requiredAction": "changeProcessStatus",
       "type": "repair",
@@ -164,18 +171,6 @@
           "title": "Parts ordered",
           "message": "New charging port on the way.",
           "createdAt": "2026-01-03"
-        },
-        {
-          "id": 2,
-          "title": "Process updated",
-          "message": "Your Process confirmed",
-          "createdAt": "2026-01-05T15:26:24.695Z"
-        },
-        {
-          "id": 3,
-          "title": "Process updated",
-          "message": "Your Process repaired",
-          "createdAt": "2026-01-05T15:26:58.000Z"
         }
       ]
     },
