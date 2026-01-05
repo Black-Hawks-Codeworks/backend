@@ -1,13 +1,13 @@
 export const initialDevices = [
   {
     id: 1,
-    name: 'OnePlus 11',
+    name: 'iPhone 14 Pro Max',
     category: 'Phones',
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
     image: {
-      filename: 'oneplus.png',
-      url: '/photos/oneplus.png',
+      filename: 'iphone14.png',
+      url: '/photos/iphone14.png',
       uploadedAt: '2025-01-01T00:00:00.000Z',
     },
   },
@@ -15,6 +15,7 @@ export const initialDevices = [
     id: 2,
     name: 'Samsung Galaxy S23 Ultra',
     category: 'Phones',
+    purchaceDate: '2025-01-01',
     warrantyType: 'premium',
     warrantyExpires: '2027-05-18',
     image: {
@@ -37,11 +38,15 @@ export const initialDevices = [
   },
   {
     id: 4,
-    name: 'Samsung Galaxy Tab S8',
-    category: 'Tablets',
+    name: 'MacBook Air M3',
+    category: 'Laptops',
     warrantyType: 'basic',
     warrantyExpires: '2026-06-30',
-    image: null,
+    image: {
+      filename: 'macbook2.png',
+      url: '/photos/macbook2.png',
+      uploadedAt: '2025-01-01T00:00:00.000Z',
+    },
   },
   {
     id: 5,
@@ -49,6 +54,10 @@ export const initialDevices = [
     category: 'Printers',
     warrantyType: 'basic',
     warrantyExpires: '2026-10-15',
-    image: null,
+    image: {
+      filename: 'macbook1.png',
+      url: '/photos/macbook1.png',
+      uploadedAt: '2025-01-01T00:00:00.000Z',
+    },
   },
 ];

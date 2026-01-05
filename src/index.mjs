@@ -279,11 +279,12 @@ app.put('/process/:processId', async (req, res) => {
 });
 
 //create a new process
-app.post('/process', (req, res) => {
+app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
+    purchaceDate: device.purchaceDate,
     description: device.description,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -293,23 +294,36 @@ app.post('/process', (req, res) => {
     image: null,
   };
   db.data.devices.push(newDevice);
+  const newRequiredAction = {
+    client: 'noActionRequired',
+    technician: process.type === 'repair' ? 'noActionRequired' : 'changeProcessStatus',
+    employee: process.type === 'return' ? 'noActionRequired' : 'changeProcessStatus',
+  };
   const newProcess = {
     processId: db.data.processes.length + 1,
     issue: process.issue ?? 'No issue reported',
-    status: 'pending',
+    status: 'started',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     expectedCost: 0,
-    requiredAction: 'changeProcessStatus',
+    requiredAction: newRequiredAction,
     type: process.type ?? 'repair',
     device: newDevice.id,
     client: user.id,
     technician: 1,
     employee: 1,
-    notifications: [],
+    notifications: [
+      {
+        id: 1,
+        title: 'Process created',
+        message: 'Your Process has been created. We are on it!',
+        createdAt: new Date().toISOString(),
+      },
+    ],
   };
 
   db.data.processes.push(newProcess);
+  await db.write();
   //simulate a delay
   setTimeout(() => {
     res.json(newProcess);
