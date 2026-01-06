@@ -70,14 +70,14 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
   if (process.status === 'confirmed') {
     const updatedProcess = {
       ...process,
-      status: 'repaired',
+      status: 'processing',
       updatedAt: new Date().toISOString(),
       notifications: [
         ...process.notifications,
         {
           id: process.notifications.length + 1,
           title: 'Process updated',
-          message: 'Your Process repaired',
+          message: 'Your Process processing',
           createdAt: new Date().toISOString(),
         },
       ],
@@ -89,7 +89,7 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
     }, 1000);
   }
 
-  if (process.status === 'repaired') {
+  if (process.status === 'processing') {
     const updatedProcess = {
       ...process,
       status: 'completed',
