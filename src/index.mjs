@@ -291,7 +291,11 @@ app.post('/process', async (req, res) => {
     category: device.category,
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
-    image: null,
+    image: {
+      filename: 'no-image-available.webp',
+      url: '/photos/no-image-available.webp',
+      uploadedAt: new Date().toISOString(),
+    },
   };
   db.data.devices.push(newDevice);
   const newRequiredAction = {
@@ -348,21 +352,21 @@ app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => 
 
   // Delete old photo file if it exists
   if (device.image && device.image.filename) {
-  const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
-     if (fs.existsSync(oldPhotoPath)) {
-       try {
-         fs.unlinkSync(oldPhotoPath);
-       } catch (err) {
-         console.error('Error deleting old photo:', err);
-       }
-     }
-   }
- //store photo
-   const photoUrl = `/photos/${req.file.filename}`;
-   device.image = {
-     filename: req.file.filename,
+    const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
+    if (fs.existsSync(oldPhotoPath)) {
+      try {
+        fs.unlinkSync(oldPhotoPath);
+      } catch (err) {
+        console.error('Error deleting old photo:', err);
+      }
+    }
+  }
+  //store photo
+  const photoUrl = `/photos/${req.file.filename}`;
+  device.image = {
+    filename: req.file.filename,
     url: photoUrl,
-     uploadedAt: new Date().toISOString(),
+    uploadedAt: new Date().toISOString(),
   };
   // save to database
   await db.write();
@@ -370,8 +374,9 @@ app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => 
   res.json({
     message: 'Photo uploaded successfully',
     photo: {
-      filename: req.file.filename,
-      // url: photoUrl,
+      filename: device.image.filename,
+      url: device.image.url,
+      uploadedAt: device.image.uploadedAt,
     },
   });
 });
