@@ -53,3 +53,26 @@ export function calculateWarranty(purchaceDate) {
     };
   }
 }
+
+export function calculateTechnicianAssignment(processes) {
+  const technicianCounts = {};
+
+  processes.forEach((process) => {
+    const technicianId = process.technician;
+    if (technicianId && technicianId > 0) {
+      technicianCounts[technicianId] = (technicianCounts[technicianId] || 0) + 1;
+    }
+  });
+  // vres to technician id me ta pio polla apotelesmata
+  let minCount = Infinity;
+  let leastUsedTechnician = null;
+
+  for (const [technicianId, count] of Object.entries(technicianCounts)) {
+    if (count < minCount) {
+      minCount = count;
+      leastUsedTechnician = Number(technicianId);
+    }
+  }
+
+  return leastUsedTechnician;
+}
