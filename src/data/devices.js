@@ -6,7 +6,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'basic',
-      expiresAt: '2026-12-02',
+      expiresAt: '2025-01-01T00:00:00.000Z',
     },
     image: {
       filename: 'iphone14.png',
