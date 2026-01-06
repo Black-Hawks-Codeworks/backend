@@ -26,7 +26,6 @@ import {
   employeeConfirmReplacement,
 } from './actions.js';
 
-
 // Create an express application
 const app = express();
 app.use(express.json());
@@ -85,9 +84,8 @@ app.get('/processes/:userType', (req, res) => {
       data = db.data.processes.filter((p) => p.client === userIdNum);
       break;
     case 'employee':
-      data = db.data.processes.filter(
-    (p) => p.employee === userIdNum && p.type === 'return');
-  break;
+      data = db.data.processes.filter((p) => p.employee === userIdNum && p.type === 'return');
+      break;
     default:
       data = [];
       break;
@@ -184,7 +182,7 @@ app.get('/process/:processId', (req, res) => {
     technician: technicianObj,
     employee: employeeObj,
     device: enrichedDeviceObj,
-    requiredAction: calculateRequiredAction(process.status,process.type),
+    requiredAction: calculateRequiredAction(process.status, process.type),
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -256,37 +254,29 @@ app.post('/process', async (req, res) => {
     },
   };
   db.data.devices.push(newDevice);
-  const newRequiredAction = {
-    client: 'noActionRequired',
-    technician: process.type === 'repair' ? 'noActionRequired' : 'changeProcessStatus',
-    employee: process.type === 'return' ? 'noActionRequired' : 'changeProcessStatus',
-  };
   const newProcess = {
-  processId: db.data.processes.length + 1,
-  issue: process.issue ?? 'No issue reported',
-  status: 'started',
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  expectedCost: 0,
-  type: process.type ?? 'repair',
-  device: newDevice.id,
-  client: user.id,
-  technician: calculateTechnicianAssignment(db.data.processes),
-  employee: calculateEmployeeAssignment(employees),
-  notifications: [
-    {
-      id: 1,
-      title: 'Process created',
-      message: 'Your Process has been created. We are on it!',
-      createdAt: new Date().toISOString(),
-    },
-  ],
-};
+    processId: db.data.processes.length + 1,
+    issue: process.issue ?? 'No issue reported',
+    status: 'started',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    expectedCost: 0,
+    type: process.type ?? 'repair',
+    device: newDevice.id,
+    client: user.id,
+    technician: calculateTechnicianAssignment(db.data.processes),
+    employee: calculateEmployeeAssignment(employees),
+    notifications: [
+      {
+        id: 1,
+        title: 'Process created',
+        message: 'Your Process has been created. We are on it!',
+        createdAt: new Date().toISOString(),
+      },
+    ],
+  };
 
-newProcess.requiredAction = calculateRequiredAction(
-  newProcess.status,
-  newProcess.type
-);
+  newProcess.requiredAction = calculateRequiredAction(newProcess.status, newProcess.type);
 
   db.data.processes.push(newProcess);
   await db.write();
