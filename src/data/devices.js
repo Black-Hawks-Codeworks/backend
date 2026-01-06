@@ -3,7 +3,7 @@ export const initialDevices = [
     id: 1,
     name: 'iPhone 14 Pro Max',
     category: 'Phones',
-    purchaceDate: '2025-01-01',
+    purchaseDate: '2025-01-01',
     warranty: {
       type: 'basic',
       expiresAt: '2025-01-01T00:00:00.000Z',
@@ -18,7 +18,7 @@ export const initialDevices = [
     id: 2,
     name: 'Samsung Galaxy S23 Ultra',
     category: 'Phones',
-    purchaceDate: '2025-01-01',
+    purchaseDate: '2025-01-01',
     warranty: {
       type: 'premium',
       expiresAt: '2027-05-18',
@@ -33,7 +33,7 @@ export const initialDevices = [
     id: 3,
     name: 'MacBook Pro 14',
     category: 'Laptops',
-    purchaceDate: '2025-01-01',
+    purchaseDate: '2025-01-01',
     warranty: {
       type: 'none',
       expiresAt: '2028-01-10T01:00:00.000Z',
@@ -48,7 +48,7 @@ export const initialDevices = [
     id: 4,
     name: 'MacBook Air M3',
     category: 'Laptops',
-    purchaceDate: '2025-01-01',
+    purchaseDate: '2025-01-01',
     warranty: {
       type: 'none',
       expiresAt: '2026-06-30',
@@ -63,7 +63,7 @@ export const initialDevices = [
     id: 5,
     name: 'Canon Pixma Printer',
     category: 'Printers',
-    purchaceDate: '2025-01-01',
+    purchaseDate: '2025-01-01',
     warranty: {
       type: 'basic',
       expiresAt: '2025-01-01T00:00:00.000Z',

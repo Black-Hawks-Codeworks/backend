@@ -241,12 +241,12 @@ app.post('/process', async (req, res) => {
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
-    purchaceDate: device.purchaceDate,
+    purchaseDate: device.purchaseDate,
     description: device.description,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     category: device.category,
-    warranty: calculateWarranty(device.purchaceDate),
+    warranty: calculateWarranty(device.purchaseDate),
     image: {
       filename: 'no-image-available.webp',
       url: '/photos/no-image-available.webp',
