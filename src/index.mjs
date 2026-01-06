@@ -9,7 +9,7 @@ import { __dirname, upload } from './multer.js';
 import fs from 'fs';
 import { initialDevices } from './data/devices.js';
 import { initialProcesses } from './data/processes.js';
-
+import { calculateRequiredAction } from './utils.js';
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
@@ -47,33 +47,6 @@ const db = await JSONFilePreset(dbPath, {
 db.data.processes.push(...initialProcesses);
 db.data.devices.push(...initialDevices);
 await db.write();
-
-//helper function to calculate required action based on status
-function calculateRequiredAction(status) {
-  switch (status) {
-    case 'started':
-      return {
-        client: 'noActionRequired',
-        technician: 'addCost',
-      };
-    case 'cost_added':
-      return {
-        client: 'paymentRequired',
-        technician: 'noActionRequired',
-      };
-    case 'confirmed':
-    case 'repaired':
-      return {
-        client: 'noActionRequired',
-        technician: 'changeProcessStatus',
-      };
-    default:
-      return {
-        client: 'noActionRequired',
-        technician: 'noActionRequired',
-      };
-  }
-}
 
 //psaxe ton hristi
 app.post('/auth/login', (req, res) => {
@@ -264,8 +237,10 @@ app.post('/process', async (req, res) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     category: device.category,
-    warrantyType: 'basic',
-    warrantyExpires: '2026-12-02',
+    warranty: {
+      type: 'basic',
+      expires: '2026-12-02',
+    },
     image: {
       filename: 'no-image-available.webp',
       url: '/photos/no-image-available.webp',
