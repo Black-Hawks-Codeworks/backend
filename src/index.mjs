@@ -77,8 +77,9 @@ app.get('/processes/:userType', (req, res) => {
       data = db.data.processes.filter((p) => p.client === userIdNum);
       break;
     case 'employee':
-      data = db.data.processes.filter((p) => p.employee === userIdNum);
-      break;
+      data = db.data.processes.filter(
+    (p) => p.employee === userIdNum && p.type === 'return');
+  break;
     default:
       data = [];
       break;
