@@ -9,7 +9,7 @@ import { __dirname, upload } from './multer.js';
 import fs from 'fs';
 import { initialDevices } from './data/devices.js';
 import { initialProcesses } from './data/processes.js';
-import { calculateRequiredAction, calculateTechnicianAssignment } from './utils.js';
+import { calculateRequiredAction, calculateTechnicianAssignment, calculateEmployeeAssignment } from './utils.js';
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
@@ -265,7 +265,7 @@ app.post('/process', async (req, res) => {
     device: newDevice.id,
     client: user.id,
     technician: calculateTechnicianAssignment(db.data.processes),
-    employee: 1,
+    employee: calculateEmployeeAssignment(employees),
     notifications: [
       {
         id: 1,

@@ -76,3 +76,12 @@ export function calculateTechnicianAssignment(processes) {
 
   return leastUsedTechnician;
 }
+
+export function calculateEmployeeAssignment(availableEmployees) {
+  // vale ta ids se ena array
+  const employeeIds = availableEmployees.map((employee) => employee.id);
+  // stin tihi pare enan
+  const randomIndex = Math.floor(Math.random() * employeeIds.length);
+
+  return employeeIds[randomIndex];
+}
