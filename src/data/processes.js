@@ -6,7 +6,7 @@
       createdAt: '2025-12-02',
       updatedAt: '2025-12-02',
       expectedCost: 0,
-      requiredAction: { client: 'paymentRequired', technician: 'changeProcessStatus', employee: 'noActionRequired' },
+
       type: 'repair',
       device: 1,
       client: 1,
@@ -28,7 +28,7 @@
       createdAt: '2025-12-02',
       updatedAt: '2025-12-02',
       expectedCost: 160,
-      requiredAction: { client: 'paymentRequired', technician: 'changeProcessStatus', employee: 'noActionRequired' },
+
       type: 'repair',
       device: 1,
       client: 1,
@@ -50,13 +50,13 @@
       ],
     },
     {
-      processId: 2,
+      processId: 3,
       issue: 'Battery swelling - Safety hazard',
       status: 'started',
       createdAt: '2025-12-02',
       updatedAt: '2025-12-02',
       expectedCost: 160,
-      requiredAction: { client: 'paymentRequired', technician: 'changeProcessStatus', employee: 'noActionRequired' },
+
       type: 'return',
       device: 1,
       client: 1,

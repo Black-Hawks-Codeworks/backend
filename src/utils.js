@@ -1,5 +1,25 @@
 //helper function to calculate required action based on status
-export function calculateRequiredAction(status) {
+export function calculateRequiredAction(status, type) {
+  if (type === 'return') {
+    switch (status) {
+      case 'started':
+      case 'confirmed':
+      case 'processing':
+        return {
+          client: 'noActionRequired',
+          technician: 'noActionRequired',
+          employee: 'changeProcessStatus',
+        };
+      default:
+        return {
+          client: 'noActionRequired',
+          technician: 'noActionRequired',
+          employee: 'noActionRequired',
+        };
+    }
+  }
+
+  // repairs
   switch (status) {
     case 'started':
       return {
@@ -12,7 +32,7 @@ export function calculateRequiredAction(status) {
         technician: 'noActionRequired',
       };
     case 'confirmed':
-    case 'repaired':
+    case 'processing':
       return {
         client: 'noActionRequired',
         technician: 'changeProcessStatus',
