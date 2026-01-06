@@ -14,6 +14,12 @@ import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
 import { technicians } from './data/technicians.js';
+import {
+  technicianAddCost,
+  customerAcceptPayment,
+  changeProcessStatus,
+  employeeConfirmReplacement,
+} from './actions.js';
 
 
 // Create an express application
@@ -126,7 +132,11 @@ app.get('/processes/:userType', (req, res) => {
 app.get('/process/:processId', (req, res) => {
   const { processId } = req.params;
   const processIdNum = processId ? parseInt(processId, 10) : -1;
+
   const process = db.data.processes.find((p) => p.processId === processIdNum);
+  if (!process) {
+    return res.status(404).json({ error: 'Process not found' });
+  }
   const clientObj =
     process.client !== null && process.client !== undefined
       ? clients.find((c) => c.id === process.client) || null
@@ -185,7 +195,6 @@ app.put('/process/:processId', async (req, res) => {
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   const { newRequiredAction, expectedCost } = req.body;
 
-  // πιθανά actions
   const possibleActions = [
     'noActionRequired',
     'paymentRequired',
@@ -202,137 +211,22 @@ app.put('/process/:processId', async (req, res) => {
     return res.status(404).json({ error: 'Process not found' });
   }
 
-  // Technician adds cost
   if (newRequiredAction === 'addCost') {
-    const updatedProcess = {
-      ...process,
-      status: 'cost_added',
-      expectedCost: expectedCost,
-      updatedAt: new Date().toISOString(),
-      notifications: [
-        ...process.notifications,
-        {
-          id: process.notifications.length + 1,
-          title: 'Cost Added',
-          message: `Additional cost of ${expectedCost}€ required`,
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    };
-    db.data.processes = db.data.processes.map((p) =>
-      p.processId === processIdNum ? updatedProcess : p
-    );
-    await db.write();
-    return res.json(updatedProcess);
+    return technicianAddCost(process, expectedCost, db, processIdNum, res);
   }
 
-  // Customer accepts payment
   if (newRequiredAction === 'paymentAccept') {
-    const updatedProcess = {
-      ...process,
-      status: 'confirmed',
-      updatedAt: new Date().toISOString(),
-      notifications: [
-        ...process.notifications,
-        {
-          id: process.notifications.length + 1,
-          title: 'Payment Accepted',
-          message: 'Customer accepted the additional cost',
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    };
-    db.data.processes = db.data.processes.map((p) =>
-      p.processId === processIdNum ? updatedProcess : p
-    );
-    await db.write();
-    return res.json(updatedProcess);
+    return customerAcceptPayment(process, db, processIdNum, res);
   }
 
-  // change process status (next step)
   if (newRequiredAction === 'changeProcessStatus') {
-    let updatedProcess;
-
-    if (process.status === 'started') {
-      updatedProcess = {
-        ...process,
-        status: 'confirmed',
-        updatedAt: new Date().toISOString(),
-        notifications: [
-          ...process.notifications,
-          {
-            id: process.notifications.length + 1,
-            title: 'Process updated',
-            message: 'Your Process confirmed',
-            createdAt: new Date().toISOString(),
-          },
-        ],
-      };
-    } else if (process.status === 'confirmed') {
-      updatedProcess = {
-        ...process,
-        status: 'processing',
-        updatedAt: new Date().toISOString(),
-        notifications: [
-          ...process.notifications,
-          {
-            id: process.notifications.length + 1,
-            title: 'Process updated',
-            message: 'Your Process is processing',
-            createdAt: new Date().toISOString(),
-          },
-        ],
-      };
-    } else if (process.status === 'processing') {
-      updatedProcess = {
-        ...process,
-        status: 'completed',
-        updatedAt: new Date().toISOString(),
-        notifications: [
-          ...process.notifications,
-          {
-            id: process.notifications.length + 1,
-            title: 'Process updated',
-            message: 'Your Process completed',
-            createdAt: new Date().toISOString(),
-          },
-        ],
-      };
-    } else {
-      updatedProcess = process;
-    }
-
-    db.data.processes = db.data.processes.map((p) =>
-      p.processId === processIdNum ? updatedProcess : p
-    );
-    await db.write();
-    return res.json(updatedProcess);
+    return changeProcessStatus(process, db, processIdNum, res);
   }
 
-  // confirm replacement
   if (newRequiredAction === 'confirmReplacement') {
-    const updatedProcess = {
-      ...process,
-      status: 'completed',
-      updatedAt: new Date().toISOString(),
-      notifications: [
-        ...process.notifications,
-        {
-          id: process.notifications.length + 1,
-          title: 'Process updated',
-          message: 'Your Process completed',
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    };
-    db.data.processes = db.data.processes.map((p) =>
-      p.processId === processIdNum ? updatedProcess : p
-    );
-    await db.write();
-    return res.json(updatedProcess);
+    return employeeConfirmReplacement(process, db, processIdNum, res);
   }
 
-  //fallback
   return res.status(400).json({ error: 'Unhandled required action' });
 });
 //create a new process
@@ -363,27 +257,31 @@ app.post('/process', async (req, res) => {
     employee: process.type === 'return' ? 'noActionRequired' : 'changeProcessStatus',
   };
   const newProcess = {
-    processId: db.data.processes.length + 1,
-    issue: process.issue ?? 'No issue reported',
-    status: 'started',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    expectedCost: 0,
-    requiredAction: newRequiredAction,
-    type: process.type ?? 'repair',
-    device: newDevice.id,
-    client: user.id,
-    technician: calculateTechnicianAssignment(db.data.processes),
-    employee: calculateEmployeeAssignment(employees),
-    notifications: [
-      {
-        id: 1,
-        title: 'Process created',
-        message: 'Your Process has been created. We are on it!',
-        createdAt: new Date().toISOString(),
-      },
-    ],
-  };
+  processId: db.data.processes.length + 1,
+  issue: process.issue ?? 'No issue reported',
+  status: 'started',
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  expectedCost: 0,
+  type: process.type ?? 'repair',
+  device: newDevice.id,
+  client: user.id,
+  technician: calculateTechnicianAssignment(db.data.processes),
+  employee: calculateEmployeeAssignment(employees),
+  notifications: [
+    {
+      id: 1,
+      title: 'Process created',
+      message: 'Your Process has been created. We are on it!',
+      createdAt: new Date().toISOString(),
+    },
+  ],
+};
+
+newProcess.requiredAction = calculateRequiredAction(
+  newProcess.status,
+  newProcess.type
+);
 
   db.data.processes.push(newProcess);
   await db.write();
