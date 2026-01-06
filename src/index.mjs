@@ -238,6 +238,9 @@ app.put('/process/:processId', async (req, res) => {
 //create a new process
 app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
+  console.log('device', device);
+  const newWarranty = calculateWarranty(device.purchaseDate);
+  console.log('newWarranty', newWarranty);
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
@@ -246,7 +249,7 @@ app.post('/process', async (req, res) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     category: device.category,
-    warranty: calculateWarranty(device.purchaseDate),
+    warranty: newWarranty,
     image: {
       filename: 'no-image-available.webp',
       url: '/photos/no-image-available.webp',

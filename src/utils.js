@@ -46,13 +46,9 @@ export function calculateRequiredAction(status, type) {
 }
 
 export function calculateWarranty(purchaseDate) {
-  const possibleWarranties = {
-    basic: 1,
-    premium: 2,
-    none: 3,
-  };
-  const warantyRandom = Math.floor(Math.random() * 3) + 1;
-  const warrantyType = possibleWarranties[warantyRandom];
+  const warrantyTypes = ['basic', 'premium', 'none'];
+  const warantyRandom = Math.floor(Math.random() * 3);
+  const warrantyType = warrantyTypes[warantyRandom];
 
   if (warrantyType === 'basic') {
     return {
@@ -63,7 +59,7 @@ export function calculateWarranty(purchaseDate) {
   if (warrantyType === 'premium') {
     return {
       type: warrantyType,
-      expiresAt: new Date(purchaseDate.setFullYear(purchaseDate.getFullYear() + 2)).toISOString(),
+      expiresAt: new Date(new Date(purchaseDate).setFullYear(new Date(purchaseDate).getFullYear() + 2)).toISOString(),
     };
   }
   if (warrantyType === 'none') {
