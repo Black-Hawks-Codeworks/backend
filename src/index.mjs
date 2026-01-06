@@ -170,7 +170,7 @@ app.get('/process/:processId', (req, res) => {
     technician: technicianObj,
     employee: employeeObj,
     device: enrichedDeviceObj,
-    requiredAction: calculateRequiredAction(process.status),
+    requiredAction: calculateRequiredAction(process.status,process.type),
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -216,7 +216,9 @@ app.put('/process/:processId', async (req, res) => {
   }
   // change process status (next step)
   if (newRequiredAction === 'changeProcessStatus') {
+
     await changeProcessStatus(process);
+
   }
   // confirm replacement
   if (newRequiredAction === 'confirmReplacement') {
