@@ -1,4 +1,4 @@
-  export const initialProcesses = [
+export const initialProcesses = [
     {
       processId: 1,
       issue: 'I changed my mind! I want to return the device.',
@@ -50,7 +50,7 @@
       ],
     },
     {
-      processId: 2,
+      processId: 3,
       issue: 'Battery swelling - Safety hazard',
       status: 'started',
       createdAt: '2025-12-02',
