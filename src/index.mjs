@@ -279,37 +279,55 @@ app.put('/process/:processId', async (req, res) => {
 });
 
 //create a new process
-app.post('/process', (req, res) => {
+app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
+    purchaceDate: device.purchaceDate,
     description: device.description,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    category: 'Phones',
+    category: device.category,
     warrantyType: 'basic',
     warrantyExpires: '2026-12-02',
-    image: null,
+    image: {
+      filename: 'no-image-available.webp',
+      url: '/photos/no-image-available.webp',
+      uploadedAt: new Date().toISOString(),
+    },
   };
   db.data.devices.push(newDevice);
+  const newRequiredAction = {
+    client: 'noActionRequired',
+    technician: process.type === 'repair' ? 'noActionRequired' : 'changeProcessStatus',
+    employee: process.type === 'return' ? 'noActionRequired' : 'changeProcessStatus',
+  };
   const newProcess = {
     processId: db.data.processes.length + 1,
     issue: process.issue ?? 'No issue reported',
-    status: 'pending',
+    status: 'started',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     expectedCost: 0,
-    requiredAction: 'changeProcessStatus',
+    requiredAction: newRequiredAction,
     type: process.type ?? 'repair',
     device: newDevice.id,
     client: user.id,
     technician: 1,
     employee: 1,
-    notifications: [],
+    notifications: [
+      {
+        id: 1,
+        title: 'Process created',
+        message: 'Your Process has been created. We are on it!',
+        createdAt: new Date().toISOString(),
+      },
+    ],
   };
 
   db.data.processes.push(newProcess);
+  await db.write();
   //simulate a delay
   setTimeout(() => {
     res.json(newProcess);
@@ -317,7 +335,7 @@ app.post('/process', (req, res) => {
 });
 
 // Upload photo for a device
-app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
+app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => {
   const { deviceId } = req.params;
   const deviceIdNum = parseInt(deviceId, 10);
 
@@ -333,31 +351,32 @@ app.post('/device/:deviceId/photo', upload.single('photo'), (req, res) => {
   }
 
   // Delete old photo file if it exists
-  // if (device.image && device.image.filename) {
-  //   const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
-  //   if (fs.existsSync(oldPhotoPath)) {
-  //     try {
-  //       fs.unlinkSync(oldPhotoPath);
-  //     } catch (err) {
-  //       console.error('Error deleting old photo:', err);
-  //     }
-  //   }
-  // }
-  // store photo
-  // const photoUrl = `/photos/${req.file.filename}`;
-  // device.image = {
-  //   filename: req.file.filename,
-  //   url: photoUrl,
-  //   uploadedAt: new Date().toISOString(),
-  // };
-  // // save to database
-  // db.write();
+  if (device.image && device.image.filename) {
+    const oldPhotoPath = path.join(__dirname, 'data', 'photos', device.image.filename);
+    if (fs.existsSync(oldPhotoPath)) {
+      try {
+        fs.unlinkSync(oldPhotoPath);
+      } catch (err) {
+        console.error('Error deleting old photo:', err);
+      }
+    }
+  }
+  //store photo
+  const photoUrl = `/photos/${req.file.filename}`;
+  device.image = {
+    filename: req.file.filename,
+    url: photoUrl,
+    uploadedAt: new Date().toISOString(),
+  };
+  // save to database
+  await db.write();
 
   res.json({
     message: 'Photo uploaded successfully',
     photo: {
-      filename: req.file.filename,
-      // url: photoUrl,
+      filename: device.image.filename,
+      url: device.image.url,
+      uploadedAt: device.image.uploadedAt,
     },
   });
 });
