@@ -37,19 +37,19 @@ export function calculateWarranty(purchaceDate) {
   if (warrantyType === 'basic') {
     return {
       type: warrantyType,
-      expires: new Date(new Date(purchaceDate).setDate(new Date(purchaceDate).getDate() + 14)).toISOString(),
+      expiresAt: new Date(new Date(purchaceDate).setDate(new Date(purchaceDate).getDate() + 14)).toISOString(),
     };
   }
   if (warrantyType === 'premium') {
     return {
       type: warrantyType,
-      expires: new Date(purchaceDate.setFullYear(purchaceDate.getFullYear() + 2)).toISOString(),
+      expiresAt: new Date(purchaceDate.setFullYear(purchaceDate.getFullYear() + 2)).toISOString(),
     };
   }
   if (warrantyType === 'none') {
     return {
       type: warrantyType,
-      expires: new Date().toISOString(),
+      expiresAt: new Date().toISOString(),
     };
   }
 }

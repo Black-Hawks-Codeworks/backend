@@ -6,7 +6,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'basic',
-      expires: '2026-12-02',
+      expiresAt: '2026-12-02',
     },
     image: {
       filename: 'iphone14.png',
@@ -21,7 +21,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'premium',
-      expires: '2027-05-18',
+      expiresAt: '2027-05-18',
     },
     image: {
       filename: 'samsungalaxy-S23.jpg',
@@ -36,7 +36,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'extended',
-      expires: '2028-01-10T01:00:00.000Z',
+      expiresAt: '2028-01-10T01:00:00.000Z',
     },
     image: {
       filename: 'macbook.png',
@@ -51,7 +51,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'basic',
-      expires: '2026-06-30',
+      expiresAt: '2026-06-30',
     },
     image: {
       filename: 'macbook2.png',
@@ -66,7 +66,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'basic',
-      expires: '2026-10-15',
+      expiresAt: '2026-10-15',
     },
     image: {
       filename: 'macbook1.png',

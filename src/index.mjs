@@ -9,7 +9,12 @@ import { __dirname, upload } from './multer.js';
 import fs from 'fs';
 import { initialDevices } from './data/devices.js';
 import { initialProcesses } from './data/processes.js';
-import { calculateRequiredAction, calculateTechnicianAssignment, calculateEmployeeAssignment } from './utils.js';
+import {
+  calculateRequiredAction,
+  calculateTechnicianAssignment,
+  calculateEmployeeAssignment,
+  calculateWarranty,
+} from './utils.js';
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
@@ -49,6 +54,7 @@ db.data.devices.push(...initialDevices);
 await db.write();
 
 //psaxe ton hristi
+//done
 app.post('/auth/login', (req, res) => {
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
   const { username, password } = req.body;
@@ -61,6 +67,7 @@ app.post('/auth/login', (req, res) => {
 });
 
 //all processes for a given user type
+//done
 app.get('/processes/:userType', (req, res) => {
   const { userId } = req.query;
   const userIdNum = userId ? parseInt(userId, 10) : -1;
@@ -127,6 +134,7 @@ app.get('/processes/:userType', (req, res) => {
 });
 
 //get one process for a given process id
+//done
 app.get('/process/:processId', (req, res) => {
   const { processId } = req.params;
   const processIdNum = processId ? parseInt(processId, 10) : -1;
@@ -237,10 +245,7 @@ app.post('/process', async (req, res) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     category: device.category,
-    warranty: {
-      type: 'basic',
-      expires: '2026-12-02',
-    },
+    warranty: calculateWarranty(device.purchaceDate),
     image: {
       filename: 'no-image-available.webp',
       url: '/photos/no-image-available.webp',
@@ -285,6 +290,7 @@ app.post('/process', async (req, res) => {
 });
 
 // Upload photo for a device
+//done
 app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => {
   const { deviceId } = req.params;
   const deviceIdNum = parseInt(deviceId, 10);
