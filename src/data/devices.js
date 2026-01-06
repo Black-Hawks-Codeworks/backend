@@ -35,7 +35,7 @@ export const initialDevices = [
     category: 'Laptops',
     purchaceDate: '2025-01-01',
     warranty: {
-      type: 'extended',
+      type: 'none',
       expiresAt: '2028-01-10T01:00:00.000Z',
     },
     image: {
@@ -50,7 +50,7 @@ export const initialDevices = [
     category: 'Laptops',
     purchaceDate: '2025-01-01',
     warranty: {
-      type: 'basic',
+      type: 'none',
       expiresAt: '2026-06-30',
     },
     image: {
@@ -66,7 +66,7 @@ export const initialDevices = [
     purchaceDate: '2025-01-01',
     warranty: {
       type: 'basic',
-      expiresAt: '2026-10-15',
+      expiresAt: '2025-01-01T00:00:00.000Z',
     },
     image: {
       filename: 'macbook1.png',
