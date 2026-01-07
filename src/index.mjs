@@ -184,7 +184,6 @@ app.put('/process/:processId', async (req, res) => {
   const processIdNum = processId ? parseInt(processId, 10) : -1;
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   const { newRequiredAction, expectedCost } = req.body;
-  const expectedCostNum = expectedCost ? parseFloat(expectedCost) : 0;
   const possibleActions = ['hasChangedProcessStatus', 'hasAddedCost', 'hasAcceptedPayment', 'hasDeclinedPayment'];
 
   if (!possibleActions.includes(newRequiredAction)) {
@@ -195,7 +194,15 @@ app.put('/process/:processId', async (req, res) => {
   }
 
   //actions
+  console.log(`The user has requested to update the process id ${processIdNum} with the action ${newRequiredAction}`);
   if (newRequiredAction === 'hasAddedCost') {
+    if (expectedCost === undefined || expectedCost === null || expectedCost === '') {
+      return res.status(400).json({ error: 'expectedCost is required for hasAddedCost action' });
+    }
+    const expectedCostNum = parseFloat(expectedCost);
+    if (isNaN(expectedCostNum)) {
+      return res.status(400).json({ error: 'expectedCost must be a valid positive number' });
+    }
     return technicianRequestedPayment(process, expectedCostNum, db, processIdNum, res);
   }
 
@@ -240,8 +247,8 @@ app.post('/process', async (req, res) => {
     status: 'started',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
-    expectedCost: 0,
-    type: process.type ?? 'repair',
+    expectedCost: null,
+    type: process.type,
     device: newDevice.id,
     client: user.id,
     technician: calculateTechnicianAssignment(db.data.processes),
