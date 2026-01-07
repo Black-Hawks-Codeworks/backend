@@ -2,18 +2,16 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { swaggerOptions } from './swagger.mjs';
 import swaggerUi from 'swagger-ui-express';
-import { JSONFilePreset } from 'lowdb/node';
 import { env } from 'node:process';
 import path from 'path';
 import { __dirname, upload } from './multer.js';
 import fs from 'fs';
-import { initialDevices } from './data/devices.js';
-import { initialProcesses } from './data/processes.js';
 import {
   calculateRequiredAction,
   calculateTechnicianAssignment,
   calculateEmployeeAssignment,
   calculateWarranty,
+  initializeDatabase,
 } from './utils.js';
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
@@ -38,20 +36,7 @@ const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
 //lowdb initialisation
-// Use absolute path and ensure directory exists
-const dbPath = path.join(__dirname, 'data', 'db.json');
-const dataDir = path.dirname(dbPath);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-const db = await JSONFilePreset(dbPath, {
-  processes: [],
-  devices: [],
-});
-
-db.data.processes.push(...initialProcesses);
-db.data.devices.push(...initialDevices);
-await db.write();
+const db = await initializeDatabase();
 
 //psaxe ton hristi
 //done
