@@ -10,7 +10,7 @@ export async function technicianRequestedPayment(process, expectedCost, db, proc
       {
         id: process.notifications.length + 1,
         title: 'Payment Required',
-        message: `Additional cost of ${expectedCost}€ is required to complete the repairs`,
+        message: `An additional cost of ${expectedCost}€ is required to complete the repairs`,
         createdAt: new Date().toISOString(),
       },
     ],
@@ -35,7 +35,7 @@ export async function customerAcceptPayment(process, db, processIdNum, res) {
       {
         id: process.notifications.length + 1,
         title: 'Payment Accepted',
-        message: 'Customer accepted the additional cost',
+        message: 'The customer accepted the additional cost',
         createdAt: new Date().toISOString(),
       },
     ],
@@ -61,7 +61,7 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
         {
           id: process.notifications.length + 1,
           title: 'Process updated',
-          message: 'Your Process confirmed',
+          message: 'The process submission has been confirmed',
           createdAt: new Date().toISOString(),
         },
       ],
@@ -83,7 +83,7 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
         {
           id: process.notifications.length + 1,
           title: 'Process updated',
-          message: 'Your Process processing',
+          message: 'The Process processing has been initiated',
           createdAt: new Date().toISOString(),
         },
       ],
@@ -105,7 +105,7 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
         {
           id: process.notifications.length + 1,
           title: 'Process updated',
-          message: 'Your Process completed',
+          message: 'The process processing is now completed',
           createdAt: new Date().toISOString(),
         },
       ],
@@ -130,7 +130,7 @@ export async function customerDeclinePayment(process, db, processIdNum, res) {
       {
         id: process.notifications.length + 1,
         title: 'Process Completed',
-        message: 'This Process has been cancelled by the customer',
+        message: 'The Process has been canceled. Customer declined the payment of the additional cost',
         createdAt: new Date().toISOString(),
       },
     ],
