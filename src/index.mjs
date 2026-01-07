@@ -21,7 +21,6 @@ import {
   technicianRequestedPayment,
   customerAcceptPayment,
   changeProcessStatus,
-  employeeConfirmedReplacement,
   customerDeclinePayment,
 } from './actions.js';
 
@@ -186,13 +185,7 @@ app.put('/process/:processId', async (req, res) => {
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   const { newRequiredAction, expectedCost } = req.body;
 
-  const possibleActions = [
-    'hasChangedProcessStatus',
-    'hasConfirmedReplacement',
-    'hasAddedCost',
-    'hasAcceptedPayment',
-    'hasDeclinedPayment',
-  ];
+  const possibleActions = ['hasChangedProcessStatus', 'hasAddedCost', 'hasAcceptedPayment', 'hasDeclinedPayment'];
 
   if (!possibleActions.includes(newRequiredAction)) {
     return res.status(400).json({ error: 'Invalid required action' });
@@ -212,10 +205,6 @@ app.put('/process/:processId', async (req, res) => {
 
   if (newRequiredAction === 'hasChangedProcessStatus') {
     return changeProcessStatus(process, db, processIdNum, res);
-  }
-
-  if (newRequiredAction === 'hasConfirmedReplacement') {
-    return employeeConfirmedReplacement(process, db, processIdNum, res);
   }
 
   if (newRequiredAction === 'hasDeclinedPayment') {
