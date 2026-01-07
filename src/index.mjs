@@ -184,7 +184,7 @@ app.put('/process/:processId', async (req, res) => {
   const processIdNum = processId ? parseInt(processId, 10) : -1;
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   const { newRequiredAction, expectedCost } = req.body;
-
+  const expectedCostNum = expectedCost ? parseFloat(expectedCost) : 0;
   const possibleActions = ['hasChangedProcessStatus', 'hasAddedCost', 'hasAcceptedPayment', 'hasDeclinedPayment'];
 
   if (!possibleActions.includes(newRequiredAction)) {
@@ -196,7 +196,7 @@ app.put('/process/:processId', async (req, res) => {
 
   //actions
   if (newRequiredAction === 'hasAddedCost') {
-    return technicianRequestedPayment(process, expectedCost, db, processIdNum, res);
+    return technicianRequestedPayment(process, expectedCostNum, db, processIdNum, res);
   }
 
   if (newRequiredAction === 'hasAcceptedPayment') {

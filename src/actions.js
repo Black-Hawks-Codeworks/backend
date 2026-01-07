@@ -3,7 +3,7 @@ export async function technicianRequestedPayment(process, expectedCost, db, proc
   const updatedProcess = {
     ...process,
     requiredAction: { client: 'paymentRequired', technician: 'noActionRequired', employee: 'noActionRequired' },
-    expectedCost: expectedCost,
+    expectedCost: parseFloat(expectedCost),
     updatedAt: new Date().toISOString(),
     notifications: [
       ...process.notifications,
