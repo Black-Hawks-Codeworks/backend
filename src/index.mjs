@@ -18,10 +18,11 @@ import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
 import { technicians } from './data/technicians.js';
 import {
-  technicianAddCost,
+  technicianRequestedPayment,
   customerAcceptPayment,
   changeProcessStatus,
-  employeeConfirmReplacement,
+  employeeConfirmedReplacement,
+  customerDeclinePayment,
 } from './actions.js';
 
 // Create an express application
@@ -167,7 +168,7 @@ app.get('/process/:processId', (req, res) => {
     technician: technicianObj,
     employee: employeeObj,
     device: enrichedDeviceObj,
-    requiredAction: calculateRequiredAction(process.status, process.type),
+    // requiredAction: calculateRequiredAction(process.status, process.type),
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -188,11 +189,11 @@ app.put('/process/:processId', async (req, res) => {
 
   const possibleActions = [
     'noActionRequired',
-    'paymentRequired',
-    'changeProcessStatus',
-    'confirmReplacement',
-    'addCost',
-    'paymentAccept',
+    'hasChangedProcessStatus',
+    'hasConfirmedReplacement',
+    'hasAddedCost',
+    'hasAcceptedPayment',
+    'hasDeclinedPayment',
   ];
 
   if (!possibleActions.includes(newRequiredAction)) {
@@ -202,24 +203,30 @@ app.put('/process/:processId', async (req, res) => {
     return res.status(404).json({ error: 'Process not found' });
   }
 
-  if (newRequiredAction === 'addCost') {
-    return technicianAddCost(process, expectedCost, db, processIdNum, res);
+  //actions
+  if (newRequiredAction === 'hasAddedCost') {
+    return technicianRequestedPayment(process, expectedCost, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'paymentAccept') {
+  if (newRequiredAction === 'hasAcceptedPayment') {
     return customerAcceptPayment(process, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'changeProcessStatus') {
+  if (newRequiredAction === 'hasChangedProcessStatus') {
     return changeProcessStatus(process, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'confirmReplacement') {
-    return employeeConfirmReplacement(process, db, processIdNum, res);
+  if (newRequiredAction === 'hasConfirmedReplacement') {
+    return employeeConfirmedReplacement(process, db, processIdNum, res);
+  }
+
+  if (newRequiredAction === 'hasDeclinedPayment') {
+    return customerDeclinePayment(process, db, processIdNum, res);
   }
 
   return res.status(400).json({ error: 'Unhandled required action' });
 });
+
 //create a new process
 app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;

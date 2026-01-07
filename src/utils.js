@@ -31,12 +31,7 @@ export function calculateRequiredAction(status, type) {
     case 'started':
       return {
         client: 'noActionRequired',
-        technician: 'addCost',
-      };
-    case 'cost_added':
-      return {
-        client: 'paymentRequired',
-        technician: 'noActionRequired',
+        technician: 'changeProcessStatus',
       };
     case 'confirmed':
     case 'processing':
