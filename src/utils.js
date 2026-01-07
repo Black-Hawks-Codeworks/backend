@@ -1,47 +1,32 @@
-//helper function to calculate required action based on status
-export function calculateRequiredAction(status, type) {
-  if (type === 'return') {
-    switch (status) {
-      case 'started':
-      case 'confirmed':
-      case 'processing':
-        return {
-          client: 'noActionRequired',
-          technician: 'noActionRequired',
-          employee: 'changeProcessStatus',
-        };
-      default:
-        return {
-          client: 'noActionRequired',
-          technician: 'noActionRequired',
-          employee: 'noActionRequired',
-        };
-    }
-  }
+import path from 'path';
+import fs from 'fs';
+import { JSONFilePreset } from 'lowdb/node';
+import { __dirname } from './multer.js';
+import { initialProcesses } from './data/processes.js';
+import { initialDevices } from './data/devices.js';
 
-  // repairs
-  switch (status) {
-    case 'started':
-      return {
-        client: 'noActionRequired',
-        technician: 'addCost',
-      };
-    case 'cost_added':
-      return {
-        client: 'paymentRequired',
-        technician: 'noActionRequired',
-      };
-    case 'confirmed':
-    case 'processing':
-      return {
-        client: 'noActionRequired',
-        technician: 'changeProcessStatus',
-      };
-    default:
+//helper function to calculate initial required action based on status
+export function calculateInitialRequiredAction(type, warranty) {
+  if (type === 'return') {
+    if (warranty.type === 'basic' || warranty.type === 'premium') {
+      const inWarranty = warranty && warranty.expiresAt ? new Date(warranty.expiresAt) > new Date() : false;
+      console.log('inWarranty', inWarranty);
+      //gia to none edo
       return {
         client: 'noActionRequired',
         technician: 'noActionRequired',
+        employee: 'changeProcessStatus',
       };
+    }
+    if (type === 'repair') {
+      if (warranty.type === 'basic') {
+        return {
+          employee: 'noActionRequired',
+          client: 'noActionRequired',
+          technician: 'changeProcessStatus',
+        };
+      }
+    }
   }
 }
 
@@ -100,4 +85,39 @@ export function calculateEmployeeAssignment(availableEmployees) {
   const randomIndex = Math.floor(Math.random() * employeeIds.length);
 
   return employeeIds[randomIndex];
+}
+
+export async function initializeDatabase() {
+  const dbPath = path.join(__dirname, 'data', 'db.json');
+  const dataDir = path.dirname(dbPath);
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+  const db = await JSONFilePreset(dbPath, {
+    processes: [],
+    devices: [],
+  });
+
+  await db.read();
+
+  //pare ta monadika ids
+  const existingProcessIds = new Set(db.data.processes.map((p) => Number(p.processId)));
+  const existingDeviceIds = new Set(db.data.devices.map((d) => Number(d.id)));
+  //filterare ta initial processes
+  const newProcesses = initialProcesses.filter((p) => !existingProcessIds.has(Number(p.processId)));
+  const newDevices = initialDevices.filter((d) => !existingDeviceIds.has(Number(d.id)));
+
+  if (newProcesses.length > 0) {
+    db.data.processes.push(...newProcesses);
+  }
+  if (newDevices.length > 0) {
+    db.data.devices.push(...newDevices);
+  }
+
+  // grapse mono ta kenourgia
+  if (newProcesses.length > 0 || newDevices.length > 0) {
+    await db.write();
+  }
+
+  return db;
 }

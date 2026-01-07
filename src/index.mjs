@@ -2,28 +2,27 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { swaggerOptions } from './swagger.mjs';
 import swaggerUi from 'swagger-ui-express';
-import { JSONFilePreset } from 'lowdb/node';
 import { env } from 'node:process';
 import path from 'path';
 import { __dirname, upload } from './multer.js';
 import fs from 'fs';
-import { initialDevices } from './data/devices.js';
-import { initialProcesses } from './data/processes.js';
 import {
-  calculateRequiredAction,
+  calculateInitialRequiredAction,
   calculateTechnicianAssignment,
   calculateEmployeeAssignment,
   calculateWarranty,
+  initializeDatabase,
 } from './utils.js';
 import { managers } from './data/managers.js';
 import { employees } from './data/employees.js';
 import { clients } from './data/clients.js';
 import { technicians } from './data/technicians.js';
 import {
-  technicianAddCost,
+  technicianRequestedPayment,
   customerAcceptPayment,
   changeProcessStatus,
-  employeeConfirmReplacement,
+  employeeConfirmedReplacement,
+  customerDeclinePayment,
 } from './actions.js';
 
 // Create an express application
@@ -38,20 +37,7 @@ const PORT = env.PORT || 3000;
 console.log(env.PORT);
 
 //lowdb initialisation
-// Use absolute path and ensure directory exists
-const dbPath = path.join(__dirname, 'data', 'db.json');
-const dataDir = path.dirname(dbPath);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
-}
-const db = await JSONFilePreset(dbPath, {
-  processes: [],
-  devices: [],
-});
-
-db.data.processes.push(...initialProcesses);
-db.data.devices.push(...initialDevices);
-await db.write();
+const db = await initializeDatabase();
 
 //psaxe ton hristi
 //done
@@ -182,7 +168,6 @@ app.get('/process/:processId', (req, res) => {
     technician: technicianObj,
     employee: employeeObj,
     device: enrichedDeviceObj,
-    requiredAction: calculateRequiredAction(process.status, process.type),
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -202,12 +187,11 @@ app.put('/process/:processId', async (req, res) => {
   const { newRequiredAction, expectedCost } = req.body;
 
   const possibleActions = [
-    'noActionRequired',
-    'paymentRequired',
-    'changeProcessStatus',
-    'confirmReplacement',
-    'addCost',
-    'paymentAccept',
+    'hasChangedProcessStatus',
+    'hasConfirmedReplacement',
+    'hasAddedCost',
+    'hasAcceptedPayment',
+    'hasDeclinedPayment',
   ];
 
   if (!possibleActions.includes(newRequiredAction)) {
@@ -217,30 +201,34 @@ app.put('/process/:processId', async (req, res) => {
     return res.status(404).json({ error: 'Process not found' });
   }
 
-  if (newRequiredAction === 'addCost') {
-    return technicianAddCost(process, expectedCost, db, processIdNum, res);
+  //actions
+  if (newRequiredAction === 'hasAddedCost') {
+    return technicianRequestedPayment(process, expectedCost, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'paymentAccept') {
+  if (newRequiredAction === 'hasAcceptedPayment') {
     return customerAcceptPayment(process, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'changeProcessStatus') {
+  if (newRequiredAction === 'hasChangedProcessStatus') {
     return changeProcessStatus(process, db, processIdNum, res);
   }
 
-  if (newRequiredAction === 'confirmReplacement') {
-    return employeeConfirmReplacement(process, db, processIdNum, res);
+  if (newRequiredAction === 'hasConfirmedReplacement') {
+    return employeeConfirmedReplacement(process, db, processIdNum, res);
+  }
+
+  if (newRequiredAction === 'hasDeclinedPayment') {
+    return customerDeclinePayment(process, db, processIdNum, res);
   }
 
   return res.status(400).json({ error: 'Unhandled required action' });
 });
+
 //create a new process
 app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
-  console.log('device', device);
   const newWarranty = calculateWarranty(device.purchaseDate);
-  console.log('newWarranty', newWarranty);
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
@@ -279,7 +267,7 @@ app.post('/process', async (req, res) => {
     ],
   };
 
-  newProcess.requiredAction = calculateRequiredAction(newProcess.status, newProcess.type);
+  newProcess.requiredAction = calculateInitialRequiredAction(newProcess.status, newProcess.type, newDevice.warranty);
 
   db.data.processes.push(newProcess);
   await db.write();
