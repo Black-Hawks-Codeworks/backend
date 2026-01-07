@@ -1,22 +1,23 @@
 // Technician adds cost
-export async function technicianRequestedPayment(process, expectedCost, db, processIdNum, res) {
+export async function technicianRequestedPayment(process, expectedCostNum, db, processIdNum, res) {
   const updatedProcess = {
     ...process,
+    expectedCost: expectedCostNum,
     requiredAction: { client: 'paymentRequired', technician: 'noActionRequired', employee: 'noActionRequired' },
-    expectedCost: parseFloat(expectedCost),
     updatedAt: new Date().toISOString(),
     notifications: [
       ...process.notifications,
       {
         id: process.notifications.length + 1,
         title: 'Payment Required',
-        message: `An additional cost of ${expectedCost}€ is required to complete the repairs`,
+        message: `An additional cost of ${expectedCostNum}€ is required to complete the repair`,
         createdAt: new Date().toISOString(),
       },
     ],
   };
 
   db.data.processes = db.data.processes.map((p) => (p.processId === processIdNum ? updatedProcess : p));
+
   await db.write();
   return setTimeout(() => {
     res.json(updatedProcess);
