@@ -241,6 +241,8 @@ app.post('/process', async (req, res) => {
     },
   };
   db.data.devices.push(newDevice);
+  const newTechnicianId = process.type === 'repair' ? calculateTechnicianAssignment(db.data.processes) : null;
+
   const newProcess = {
     processId: db.data.processes.length + 1,
     issue: process.issue ?? 'No issue reported',
@@ -248,10 +250,11 @@ app.post('/process', async (req, res) => {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     expectedCost: null,
+    requiredAction: calculateInitialRequiredAction(process.type),
     type: process.type,
     device: newDevice.id,
     client: user.id,
-    technician: calculateTechnicianAssignment(db.data.processes),
+    technician: newTechnicianId,
     employee: calculateEmployeeAssignment(employees),
     notifications: [
       {
@@ -262,8 +265,6 @@ app.post('/process', async (req, res) => {
       },
     ],
   };
-
-  newProcess.requiredAction = calculateInitialRequiredAction(newProcess.status, newProcess.type, newDevice.warranty);
 
   db.data.processes.push(newProcess);
   await db.write();

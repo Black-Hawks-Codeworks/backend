@@ -101,6 +101,7 @@ export async function changeProcessStatus(process, db, processIdNum, res) {
       ...process,
       status: 'completed',
       updatedAt: new Date().toISOString(),
+      requiredAction: { client: 'noActionRequired', technician: 'noActionRequired', employee: 'noActionRequired' },
       notifications: [
         ...process.notifications,
         {

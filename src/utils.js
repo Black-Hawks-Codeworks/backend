@@ -6,27 +6,20 @@ import { initialProcesses } from './data/processes.js';
 import { initialDevices } from './data/devices.js';
 
 //helper function to calculate initial required action based on status
-export function calculateInitialRequiredAction(type, warranty) {
+export function calculateInitialRequiredAction(type) {
   if (type === 'return') {
-    if (warranty.type === 'basic' || warranty.type === 'premium') {
-      const inWarranty = warranty && warranty.expiresAt ? new Date(warranty.expiresAt) > new Date() : false;
-      console.log('inWarranty', inWarranty);
-      //gia to none edo
-      return {
-        client: 'noActionRequired',
-        technician: 'noActionRequired',
-        employee: 'changeProcessStatus',
-      };
-    }
-    if (type === 'repair') {
-      if (warranty.type === 'basic') {
-        return {
-          employee: 'noActionRequired',
-          client: 'noActionRequired',
-          technician: 'changeProcessStatus',
-        };
-      }
-    }
+    return {
+      client: 'noActionRequired',
+      technician: 'noActionRequired',
+      employee: 'changeProcessStatus',
+    };
+  }
+  if (type === 'repair') {
+    return {
+      employee: 'noActionRequired',
+      client: 'noActionRequired',
+      technician: 'changeProcessStatus',
+    };
   }
 }
 
