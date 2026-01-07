@@ -5,45 +5,28 @@ import { __dirname } from './multer.js';
 import { initialProcesses } from './data/processes.js';
 import { initialDevices } from './data/devices.js';
 
-//helper function to calculate required action based on status
-export function calculateRequiredAction(status, type) {
+//helper function to calculate initial required action based on status
+export function calculateInitialRequiredAction(type, warranty) {
   if (type === 'return') {
-    switch (status) {
-      case 'started':
-      case 'confirmed':
-      case 'processing':
-        return {
-          client: 'noActionRequired',
-          technician: 'noActionRequired',
-          employee: 'changeProcessStatus',
-        };
-      default:
-        return {
-          client: 'noActionRequired',
-          technician: 'noActionRequired',
-          employee: 'noActionRequired',
-        };
-    }
-  }
-
-  // repairs
-  switch (status) {
-    case 'started':
-      return {
-        client: 'noActionRequired',
-        technician: 'changeProcessStatus',
-      };
-    case 'confirmed':
-    case 'processing':
-      return {
-        client: 'noActionRequired',
-        technician: 'changeProcessStatus',
-      };
-    default:
+    if (warranty.type === 'basic' || warranty.type === 'premium') {
+      const inWarranty = warranty && warranty.expiresAt ? new Date(warranty.expiresAt) > new Date() : false;
+      console.log('inWarranty', inWarranty);
+      //gia to none edo
       return {
         client: 'noActionRequired',
         technician: 'noActionRequired',
+        employee: 'changeProcessStatus',
       };
+    }
+    if (type === 'repair') {
+      if (warranty.type === 'basic') {
+        return {
+          employee: 'noActionRequired',
+          client: 'noActionRequired',
+          technician: 'changeProcessStatus',
+        };
+      }
+    }
   }
 }
 

@@ -7,7 +7,7 @@ import path from 'path';
 import { __dirname, upload } from './multer.js';
 import fs from 'fs';
 import {
-  calculateRequiredAction,
+  calculateInitialRequiredAction,
   calculateTechnicianAssignment,
   calculateEmployeeAssignment,
   calculateWarranty,
@@ -168,7 +168,6 @@ app.get('/process/:processId', (req, res) => {
     technician: technicianObj,
     employee: employeeObj,
     device: enrichedDeviceObj,
-    // requiredAction: calculateRequiredAction(process.status, process.type),
   };
   if (enrichedProcess) {
     //simulate a delays
@@ -188,7 +187,6 @@ app.put('/process/:processId', async (req, res) => {
   const { newRequiredAction, expectedCost } = req.body;
 
   const possibleActions = [
-    'noActionRequired',
     'hasChangedProcessStatus',
     'hasConfirmedReplacement',
     'hasAddedCost',
@@ -230,9 +228,7 @@ app.put('/process/:processId', async (req, res) => {
 //create a new process
 app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
-  console.log('device', device);
   const newWarranty = calculateWarranty(device.purchaseDate);
-  console.log('newWarranty', newWarranty);
   const newDevice = {
     id: db.data.devices.length + 1,
     name: device.name,
@@ -271,7 +267,7 @@ app.post('/process', async (req, res) => {
     ],
   };
 
-  newProcess.requiredAction = calculateRequiredAction(newProcess.status, newProcess.type);
+  newProcess.requiredAction = calculateInitialRequiredAction(newProcess.status, newProcess.type, newDevice.warranty);
 
   db.data.processes.push(newProcess);
   await db.write();
