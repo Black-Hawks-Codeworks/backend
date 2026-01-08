@@ -84,8 +84,8 @@ export const initialDevices = [
       expiresAt: '2026-01-01T00:00:00.000Z',
     },
     image: {
-      filename: 'no-image.jpg',
-      url: '/photos/no-image.jpg',
+      filename: 'no-image.webp',
+      url: '/photos/no-image.webp',
       uploadedAt: '2026-01-01T00:00:00.000Z',
     },
   },

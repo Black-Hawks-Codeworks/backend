@@ -235,8 +235,8 @@ app.post('/process', async (req, res) => {
     category: device.category,
     warranty: newWarranty,
     image: {
-      filename: 'no-image.jpg',
-      url: '/photos/no-image.jpg',
+      filename: 'no-image.webp',
+      url: '/photos/no-image.webp',
       uploadedAt: new Date().toISOString(),
     },
   };
