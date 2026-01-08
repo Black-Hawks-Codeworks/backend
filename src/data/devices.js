@@ -74,4 +74,19 @@ export const initialDevices = [
       uploadedAt: '2025-01-01T00:00:00.000Z',
     },
   },
+  {
+    id: 6,
+    name: 'Airfrier',
+    category: 'Appliances',
+    purchaseDate: '2026-01-01',
+    warranty: {
+      type: 'basic',
+      expiresAt: '2026-01-01T00:00:00.000Z',
+    },
+    image: {
+      filename: 'no-image.jpg',
+      url: '/photos/no-image.jpg',
+      uploadedAt: '2026-01-01T00:00:00.000Z',
+    },
+  },
 ];
