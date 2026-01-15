@@ -33,21 +33,28 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 const PORT = env.PORT || 3000;
-console.log(env.PORT);
-
+console.log('-----------BLACK HAWKS BACKEND--------------');
+console.log('---------------Craawwwwwww---------------');
+console.log(`---------------Server is running on port ${PORT}---------------`);
+console.log('--------------------------------');
+console.log('Initializing database...');
 //lowdb initialisation
 const db = await initializeDatabase();
-
+console.log('Database initialized successfully');
+console.log('--------------------------------');
 //psaxe ton hristi
 //done
 app.post('/auth/login', (req, res) => {
+  console.log('the user requested to login');
   const possibleUsers = [...managers, ...employees, ...clients, ...technicians];
   const { username, password } = req.body;
   const user = possibleUsers.find((u) => u.username === username && u.password === password);
   if (user) {
     res.json(user);
+    console.log('user logged in successfully');
   } else {
     res.status(401).json({ error: 'Invalid username or password' });
+    console.log('user login failed');
   }
 });
 
@@ -56,11 +63,9 @@ app.post('/auth/login', (req, res) => {
 app.get('/processes/:userType', (req, res) => {
   const { userId } = req.query;
   const userIdNum = userId ? parseInt(userId, 10) : -1;
-  console.log('userId', userIdNum);
   const userType = req.params.userType;
+  console.log(`userType: ${userType} with id userId: ${userIdNum} requested all processes`);
   let data = [];
-  console.log('userType', userType);
-  console.log('userId', userIdNum);
   switch (userType) {
     case 'technician':
       data = db.data.processes.filter((p) => p.technician === userIdNum);
@@ -116,6 +121,7 @@ app.get('/processes/:userType', (req, res) => {
   setTimeout(() => {
     res.json(enrichedData);
   }, 1000);
+  console.log('Processes sent successfully');
 });
 
 //get one process for a given process id
@@ -123,7 +129,7 @@ app.get('/processes/:userType', (req, res) => {
 app.get('/process/:processId', (req, res) => {
   const { processId } = req.params;
   const processIdNum = processId ? parseInt(processId, 10) : -1;
-
+  console.log(`process with id ${processIdNum} requested by the user`);
   const process = db.data.processes.find((p) => p.processId === processIdNum);
   if (!process) {
     return res.status(404).json({ error: 'Process not found' });
@@ -173,6 +179,7 @@ app.get('/process/:processId', (req, res) => {
     setTimeout(() => {
       res.json(enrichedProcess);
     }, 1000);
+    console.log('Process sent successfully');
   } else {
     res.status(404).json({ error: 'Process not found' });
   }
@@ -195,6 +202,7 @@ app.put('/process/:processId', async (req, res) => {
 
   //actions
   console.log(`The user has requested to update the process id ${processIdNum} with the action ${newRequiredAction}`);
+
   if (newRequiredAction === 'hasAddedCost') {
     if (expectedCost === undefined || expectedCost === null || expectedCost === '') {
       return res.status(400).json({ error: 'expectedCost is required for hasAddedCost action' });
@@ -217,13 +225,14 @@ app.put('/process/:processId', async (req, res) => {
   if (newRequiredAction === 'hasDeclinedPayment') {
     return customerDeclinePayment(process, db, processIdNum, res);
   }
-
+  console.log(`Process with id ${processIdNum} updated successfully`);
   return res.status(400).json({ error: 'Unhandled required action' });
 });
 
 //create a new process
 app.post('/process', async (req, res) => {
   const { process, device, user } = req.body;
+  console.log(`the user with id ${user.id} requested to create a new process`);
   const newWarranty = calculateWarranty(device.purchaseDate);
   const newDevice = {
     id: db.data.devices.length + 1,
@@ -241,6 +250,7 @@ app.post('/process', async (req, res) => {
     },
   };
   db.data.devices.push(newDevice);
+  console.log(`Device with id ${newDevice.id} created successfully`);
   const newTechnicianId = process.type === 'repair' ? calculateTechnicianAssignment(db.data.processes) : null;
 
   const newProcess = {
@@ -272,6 +282,7 @@ app.post('/process', async (req, res) => {
   setTimeout(() => {
     res.json(newProcess);
   }, 1000);
+  console.log(`Process with id ${newProcess.processId} created successfully by the user with id ${user.id}`);
 });
 
 // Upload photo for a device
@@ -279,7 +290,7 @@ app.post('/process', async (req, res) => {
 app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => {
   const { deviceId } = req.params;
   const deviceIdNum = parseInt(deviceId, 10);
-
+  console.log(`the user with id ${req.user.id} requested to upload a photo for the device with id ${deviceIdNum}`);
   if (!req.file) {
     return res.status(400).json({ error: 'No photo file provided' });
   }
@@ -320,6 +331,7 @@ app.post('/device/:deviceId/photo', upload.single('photo'), async (req, res) => 
       uploadedAt: device.image.uploadedAt,
     },
   });
+  console.log(`Photo uploaded successfully for the device with id ${deviceIdNum}`);
 });
 
 // Serve static files from photos directory
