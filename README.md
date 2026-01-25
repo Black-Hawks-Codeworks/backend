@@ -6,19 +6,31 @@ can be found but it is not finished.
 
 ## API and Lowdb Initialization
 
-The [index](./src/index.mjs)
+The [index](./src/index.mjs) is the entrypoint of the app, at its beginning
+the Express api is initialized then the LowDb. There is
+a helper function in [utils](./src/utils.js) that checks
+if the db.json exists and if it already contains the data
+found in the .js file found in data/. If not it creates it
+and seeds the database with the arrays from the js files.
 
-If add the start:dev script in the package.json:
-**Use this**
+Then the endpoints are implemented. To avoid code douplication
+endpoint [actions](./src/actions.js) and [utility functions](./src/utils.js) where moved
+to different files.
 
-```bash
-npm run start:dev
-```
+For example the backend auto assigns new processes to the least busy
+technicians and randomly assigns type of warranty to newly created
+devices. These functions where moved to utils.js.
+
+## Multer
+
+[Multer](./src/multer.js) is a package that allows us to statically
+host the [image directory](./src/data/photos/)
 
 ## Swagger
 
-To see(and use) the available endpoints, while the containers are running, visit:
+To [see](./src/swagger.mjs)(and use) the available endpoints, while the containers
+are running, visit:
 
-```
-http://localhost:3000/api-docs
+```url
+http://localhost:3000/docs
 ```
