@@ -1,12 +1,12 @@
-# This project includes exercises and notes for Express.js
+# Backend
 
----
+This repo contains the backend api, the data storage using Lowdb and
+the static hosting of the images using multer. Swagger configuration
+can be found but it is not finished.
 
-## Notes
+## API and Lowdb Initialization
 
-### Initializing a project
-
-There is no Vite.js for express.js project the project must be initialized manually.
+The [index](./src/index.mjs)
 
 If add the start:dev script in the package.json:
 **Use this**
@@ -15,50 +15,7 @@ If add the start:dev script in the package.json:
 npm run start:dev
 ```
 
-It does the same thing but nodemon can be customizised
-
-### Route parameters and Query parameters
-
-Both "live" inside the route.
-
-- Route params:
-  *www.test.gr/products/onsale/:id*
-  To extract that in code, we need to access the req object:
-
-```js
-app.get("/api/users/:id", (req, res) => {
-	const userId = parseInt(req.params.id, -1);
-    ...
-```
-
-- Query params:
-
-  We can have one:
-
-  *www.test.gr/users?id=1*
-
-  Or multiple:
-
-  *www.test.gr/users?id=1&sorted=true*
-
-### On Pg
-
-Best practices:
-
-- Use environment variables for database credentials
-- Use connection pooling (as shown in the example with Pool)
-- Always handle database errors properly
-- Use parameterized queries to prevent SQL injection
-- Close the pool when shutting down your application:
-
-```javascript
-process.on('SIGINT', async () => {
-  await pool.end();
-  process.exit(0);
-});
-```
-
-### Swagger
+## Swagger
 
 To see(and use) the available endpoints, while the containers are running, visit:
 
